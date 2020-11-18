@@ -35,7 +35,7 @@
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <div class="container">
+        <div class="container py-3 border-bottom border-dark">
             <a class="navbar-brand ml-2" href="#">K-Fashion</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@
         </div>
         <div class="row justify-content-center py-2">
             <form class="col-sm-6 needs-validation" method="POST"
-                  th:action="@{/signUpForm}" th:object="${signUpForm}" novalidate>
+                  th:action="@{/sign-up}" th:object="${signUpForm}" novalidate>
                 <div class="form-group">
                     <label for="nickname">닉네임</label>
                     <input type="text" class="form-control" id="nickname"
@@ -93,7 +93,7 @@
                 <div class="form-group">
                     <label for="email">이메일</label>
                     <input type="email" class="form-control" id="email"
-                           aria-describedby="emailHelp" th:field="*{email}" pattern="email" required>
+                           aria-describedby="emailHelp" th:field="*{email}" required>
                     <small id="emailHelp" class="form-text text-muted">
                         K-Fashion 은 사용자의 이메일을 공개하지 않습니다.</small>
                     <small class="invalid-feedback">이메일을 입력하세요.</small>

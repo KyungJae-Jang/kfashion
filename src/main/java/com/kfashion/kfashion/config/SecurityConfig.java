@@ -10,7 +10,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .mvcMatchers("/index", "account/sign-up")
+                .mvcMatchers("/index", "account/sign-up", "account/checked-email")
                 .permitAll();
     }
 }

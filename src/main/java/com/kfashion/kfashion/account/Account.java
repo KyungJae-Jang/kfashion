@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter @Setter
@@ -34,4 +35,8 @@ public class Account {
     private boolean commentPostedByEmail;
 
     private boolean commentPostedByWeb;
+
+    public void generateCheckToken() {
+        this.emailCheckToken = UUID.randomUUID().toString();
+    }
 }
