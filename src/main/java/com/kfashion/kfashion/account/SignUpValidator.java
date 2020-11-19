@@ -8,8 +8,7 @@ import org.springframework.validation.Validator;
 @Component
 public class SignUpValidator implements Validator {
 
-    @Autowired
-    AccountRepository accountRepository;
+    @Autowired AccountRepository accountRepository;
 
     @Override
     public boolean supports(Class<?> aClass) {
