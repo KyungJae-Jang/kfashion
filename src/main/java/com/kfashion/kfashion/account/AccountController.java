@@ -7,6 +7,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ public class AccountController {
 
     @Autowired SignUpValidator signUpValidator;
     @Autowired AccountService accountService;
+    @Autowired AccountRepository accountRepository;
 
 
     @InitBinder
@@ -40,9 +42,20 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @GetMapping("/checked-email")
-    public String checkedEmail() {
+    @GetMapping("/check-email-token")
+    public String checkedEmail(String email, String token, Model model) {
+        Account account = accountRepository.findByEmail(email);
+        String view = "account/checked-email";
+        if(!accountRepository.existsByEmail(email)) {
+            model.addAttribute("error", "wrong.email");
+            return view;
+        }
+        if(!account.getEmailCheckToken().equals(token)){
+            model.addAttribute("error", "wrong.token");
+            return view;
+        }
 
-        return "account/checked-email";
+        model.addAttribute("email", account.getEmail());
+        return view;
     }
 }

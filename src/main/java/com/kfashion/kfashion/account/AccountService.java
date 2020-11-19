@@ -5,10 +5,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
+@Transactional
 public class AccountService {
     @Autowired AccountRepository accountRepository;
     @Autowired JavaMailSender javaMailSender;
@@ -18,7 +20,7 @@ public class AccountService {
         Account account = createNewAccount(signUpForm);
         Account newAccount = accountRepository.save(account);
         newAccount.generateCheckToken();
-        sendConfirmationEmail(newAccount);
+        sendCheckEmailToken(newAccount);
     }
 
     private Account createNewAccount(SignUpForm signUpForm) {
@@ -31,10 +33,10 @@ public class AccountService {
         return account;
     }
 
-    private void sendConfirmationEmail(Account newAccount) {
+    private void sendCheckEmailToken(Account newAccount) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setSubject("K-Fashion 인증메일");
-        msg.setText("/checked-email?email=" + newAccount.getNickName()
+        msg.setText("/check-email-token?email=" + newAccount.getEmail()
                 + "&token=" + newAccount.getEmailCheckToken());
         javaMailSender.send(msg);
     }
