@@ -7,7 +7,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -43,7 +42,7 @@ public class AccountController {
     }
 
     @GetMapping("/check-email-token")
-    public String checkedEmail(String email, String token, Model model) {
+    public String checkEmail(String email, String token, Model model) {
         Account account = accountRepository.findByEmail(email);
         String view = "account/checked-email";
         if(!accountRepository.existsByEmail(email)) {
