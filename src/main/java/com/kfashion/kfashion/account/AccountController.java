@@ -36,8 +36,9 @@ public class AccountController {
             model.addAttribute("signUpForm", signUpForm);
             return "account/sign-up";
         }
-        accountService.processNewAccount(signUpForm);
 
+        Account newAccount = accountService.processNewAccount(signUpForm);
+        accountService.login(newAccount);
         return "redirect:/";
     }
 
@@ -55,6 +56,7 @@ public class AccountController {
         }
 
         model.addAttribute("email", account.getEmail());
+        accountService.completeLogin(account);
         return view;
     }
 }
