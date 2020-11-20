@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ public class AccountService {
     public Account processNewAccount(SignUpForm signUpForm) {
         Account account = createNewAccount(signUpForm);
         Account newAccount = accountRepository.save(account);
-        newAccount.generateCheckToken();
         sendCheckEmailToken(newAccount);
 
         return newAccount;
@@ -38,6 +35,8 @@ public class AccountService {
                 .email(signUpForm.getEmail())
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
                 .build();
+        account.generateCheckToken();
+
         return account;
     }
 

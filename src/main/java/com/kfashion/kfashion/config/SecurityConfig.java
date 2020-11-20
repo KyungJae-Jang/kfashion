@@ -16,8 +16,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .mvcMatchers("/index", "account/sign-up", "account/checked-email")
-                .permitAll();
+                .mvcMatchers("/", "/sign-up", "/checked-email").permitAll()
+                .anyRequest().authenticated();
     }
 
     @Bean
