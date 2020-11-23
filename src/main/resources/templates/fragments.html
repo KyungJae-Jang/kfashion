@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light" th:fragment="navbar">
+        <div class="container py-3 border-bottom border-dark">
+            <a class="navbar-brand ml-2" href="#" th:href="@{/}">K-Fashion</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse mr-2" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">데일리룩</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">연예인 패션</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">자유게시판</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">세일 정보</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav justify-content-end">
+                    <li class="nav-item">
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        </form>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="#">로그인</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="#" th:href="@{/sign-up}">회원가입</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="#">알림</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="#">프로필</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <footer th:fragment="footer">
+        <div class="row fixed-bottom justify-content-center">
+            <small class="d-block mb-3 text-muted">&copy; 2020. K-Fashion. All right reserved</small>
+            <small class="d-block mb-3 text-muted">. mail : chong1175@naver.com</small>
+        </div>
+    </footer>
+</body>
+</html>
