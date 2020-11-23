@@ -54,7 +54,6 @@ public class AccountController {
             model.addAttribute("error", "wrong.token");
             return view;
         }
-
         model.addAttribute("email", account.getEmail());
         accountService.completeLogin(account);
         return view;
