@@ -5,8 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-light bg-light" th:fragment="navbar">
@@ -39,22 +60,33 @@
                             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                         </form>
                     </li>
-                    <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link" href="#">로그인</a>
+                    <li class="nav-item mx-2" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-sign-in"></i>
+                        </a>
                     </li>
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a class="nav-link" href="#" th:href="@{/sign-up}">회원가입</a>
+                        <a class="nav-link" href="#" th:href="@{/sign-up}">
+                            <i class="fa fa-user-plus"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-bell"></i>
+                        </a>
                     </li>
                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link" href="#">알림</a>
-                    </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link" href="#">프로필</a>
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-user-circle"></i>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    <div class="alert alert-danger container" role="alert" th:fragment="alert-emailVerified">
+        K-Fashion 가입을 완료하려면 <a href="#" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+    </div>
     <footer th:fragment="footer">
         <div class="row fixed-bottom justify-content-center">
             <small class="d-block mb-3 text-muted">&copy; 2020. K-Fashion. All right reserved</small>
