@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head"></head>
 <body class="bg-light">
     <div th:replace="fragments :: navbar"></div>
-    <div th:replace="fragments :: alert-emailVerified"></div>
     <div class="container">
         <div class="py-5 text-center">
             <h2>회원 가입</h2>
@@ -39,10 +37,6 @@
                     <small class="invalid-feedback">패스워드를 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
                 </div>
-                <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="checkbox">
-                    <label class="form-check-label" for="checkbox">Remember me</label>
-                </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">가입하기</button>
                 </div>
@@ -51,5 +45,25 @@
 
         <div th:replace="fragments :: footer"></div>
     </div>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 </body>
 </html>

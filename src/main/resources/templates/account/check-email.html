@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments :: navbar"></div>
+<div class="container">
+    <div class="py-4 text-center">
+        <h2>이메일 인증</h2>
+    </div>
+    <div class="text-center">
+        <p>
+            <h3>
+                <span th:text="${email}">email</span>
+            </h3>
+        </p>
+        <p>
+            K-Fashion 가입을 완료하려면 계정 인증 이메일을 확인하세요. <br>
+            <a href="#" th:href="@{/resend-email}">인증 이메일 재전송</a>
+        </p>
+        이메일 미 인증시 자동 탈퇴 됩니다.
+    </div>
+    <div th:replace="fragments :: footer"></div>
+</div>
+</body>
+</html>

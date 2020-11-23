@@ -28,7 +28,7 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
-    private boolean emailVerified;
+    private boolean emailVerified;  // TODO 미인증시 자동 탈퇴
 
     private String emailCheckToken;
 

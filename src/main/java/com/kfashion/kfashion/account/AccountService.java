@@ -6,17 +6,19 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Transactional
-public class AccountService {
+public class AccountService implements UserDetailsService {
     @Autowired AccountRepository accountRepository;
     @Autowired JavaMailSender javaMailSender;
     @Autowired PasswordEncoder passwordEncoder;
@@ -40,7 +42,7 @@ public class AccountService {
         return account;
     }
 
-    private void sendCheckEmailToken(Account newAccount) {
+    public void sendCheckEmailToken(Account newAccount) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setSubject("K-Fashion 인증메일");
         msg.setText("/check-email-token?email=" + newAccount.getEmail()
@@ -49,20 +51,26 @@ public class AccountService {
     }
 
     public void login(Account account) {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-
-        UsernamePasswordAuthenticationToken token =
+        UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
-                        account.getNickName(),
+                        new UserAccount(account),
                         account.getPassword(),
-                        authorities);
-        SecurityContextHolder.getContext().setAuthentication(token);
+                        List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 
     public void completeLogin(Account account) {
         account.setJoinedAt(LocalDateTime.now());
         account.setEmailVerified(true);
         login(account);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Account account = accountRepository.findByEmail(email);
+        if(account == null){
+            throw new UsernameNotFoundException(email);
+        }
+        return new UserAccount(account);
     }
 }

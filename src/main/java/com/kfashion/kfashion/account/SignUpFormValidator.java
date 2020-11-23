@@ -6,7 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class SignUpValidator implements Validator {
+public class SignUpFormValidator implements Validator {
 
     @Autowired AccountRepository accountRepository;
 

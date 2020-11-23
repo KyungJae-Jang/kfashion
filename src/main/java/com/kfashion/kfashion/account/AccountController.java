@@ -14,19 +14,23 @@ import javax.validation.Valid;
 @Controller
 public class AccountController {
 
-    @Autowired SignUpValidator signUpValidator;
-    @Autowired AccountService accountService;
-    @Autowired AccountRepository accountRepository;
+    @Autowired
+    SignUpFormValidator signUpFormValidator;
+    @Autowired
+    AccountService accountService;
+    @Autowired
+    AccountRepository accountRepository;
 
 
-    @InitBinder
-    public void initBinder(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(signUpValidator);
+    @InitBinder("signUpForm")
+    public void signUpInitBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(signUpFormValidator);
     }
 
     @GetMapping("/sign-up")
     public String signUp(Model model) {
         model.addAttribute("signUpForm", new SignUpForm());
+
         return "account/sign-up";
     }
 
@@ -43,19 +47,43 @@ public class AccountController {
     }
 
     @GetMapping("/check-email-token")
-    public String checkEmail(String email, String token, Model model) {
+    public String checkEmailToken(String email, String token, Model model) {
         Account account = accountRepository.findByEmail(email);
         String view = "account/checked-email";
-        if(!accountRepository.existsByEmail(email)) {
+        if (!accountRepository.existsByEmail(email)) {
             model.addAttribute("error", "wrong.email");
             return view;
         }
-        if(!account.getEmailCheckToken().equals(token)){
+        if (!account.getEmailCheckToken().equals(token)) {
             model.addAttribute("error", "wrong.token");
             return view;
         }
         model.addAttribute("email", account.getEmail());
         accountService.completeLogin(account);
+
         return view;
+    }
+
+    @GetMapping("/check-email")
+    public String checkEmail(@CurrentUser Account account, Model model) {
+        if (account != null) {
+            model.addAttribute("email", account.getEmail());
+        }
+
+        return "account/check-email";
+    }
+
+    @GetMapping("/resend-email")
+    public String resendEmail(@CurrentUser Account account, Model model) {
+        if(account != null){
+            accountService.sendCheckEmailToken(account);
+            model.addAttribute("email", account.getEmail());
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "account/login";
     }
 }
