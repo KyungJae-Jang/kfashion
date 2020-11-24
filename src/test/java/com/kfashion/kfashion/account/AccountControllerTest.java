@@ -1,5 +1,7 @@
 package com.kfashion.kfashion.account;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,6 +32,19 @@ class AccountControllerTest {
     @Autowired
     AccountRepository accountRepository;
 
+    @BeforeEach
+    public void beforeEach(){
+        SignUpForm signUpForm = new SignUpForm();
+        signUpForm.setEmail("chong1175@naver.com");
+        signUpForm.setNickname("kyungjae");
+        signUpForm.setPassword("12345678");
+        accountService.processNewAccount(signUpForm);
+    }
+
+    @AfterEach
+    public void afterEach(){
+        accountRepository.deleteAll();
+    }
 
     @Test
     public void 회원가입_입력값_정상 () throws Exception {
@@ -56,26 +71,23 @@ class AccountControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void 인증메일_입력값_정상() throws Exception {
-        Account account = Account.builder()
-                .nickName("kyungjae")
-                .email("chong1175@naver.com")
-                .password("12345678")
-                .build();
-        Account newAccount = accountRepository.save(account);
-        newAccount.generateCheckToken();
+        Account account = accountRepository.findByEmail("chong1175@naver.com");
 
         mockMvc.perform(get("/check-email-token")
-                    .param("email", newAccount.getEmail())
-                    .param("token", newAccount.getEmailCheckToken())
+                    .param("email", account.getEmail())
+                    .param("token", account.getEmailCheckToken())
                     .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(model().attributeExists("email"))
-                .andExpect(view().name("account/checked-email"));
+                .andExpect(view().name("account/checked-email"))
+                .andExpect(authenticated().withUsername("chong1175@naver.com"));
     }
 
     @Test
+    @WithMockUser
     public void 인증메일_입력값_비정상() throws Exception {
         mockMvc.perform(get("/check-email-token")
                     .param("email", "chongsdfdsfer.com")
