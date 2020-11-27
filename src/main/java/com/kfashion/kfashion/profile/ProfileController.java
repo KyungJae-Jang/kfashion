@@ -2,7 +2,6 @@ package com.kfashion.kfashion.profile;
 
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.CurrentUser;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +20,19 @@ public class ProfileController {
     ChangeInfoFormValidator changeInfoFormValidator;
 
     @Autowired
+    PasswordFormValidator passwordFormValidator;
+
+    @Autowired
     ProfileService profileService;
 
     @InitBinder("changeInfoForm")
     public void changeInfoInitBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(changeInfoFormValidator);
+    }
+
+    @InitBinder("passwordForm")
+    public void passwordInitBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(passwordFormValidator);
     }
 
     @GetMapping("/profile/account-info")
@@ -51,13 +58,29 @@ public class ProfileController {
             return "profile/change-info";
         }
 
-        account.setNickName(changeInfoForm.getNickname());
-        account.setCommentPostedByEmail(changeInfoForm.isCommentPostedByEmail());
-        account.setCommentPostedByWeb(changeInfoForm.isCommentPostedByWeb());
+        profileService.updateInfo(account, changeInfoForm);
+        return "redirect:/profile/account-info";
+    }
 
-        profileService.updateProfile(account);
+    @GetMapping("/profile/change-password")
+    public String changePassword(@CurrentUser Account account, Model model){
+        model.addAttribute("account", account);
+        model.addAttribute("passwordForm", new PasswordForm());
+        return "profile/change-password";
+    }
 
-        return "redirect:/";
+    @PostMapping("/profile/change-password")
+    public String changePasswordForm(@CurrentUser Account account,
+                                     @Valid PasswordForm passwordForm,
+                                     Errors errors, Model model){
+        if(errors.hasErrors()){
+            model.addAttribute("account", account);
+            model.addAttribute("passwordForm", passwordForm);
+            return "profile/change-password";
+        }
+
+        profileService.updatePassword(account, passwordForm);
+        return "redirect:/profile/account-info";
     }
 
 }

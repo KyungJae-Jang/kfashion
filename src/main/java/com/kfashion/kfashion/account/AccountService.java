@@ -36,6 +36,7 @@ public class AccountService implements UserDetailsService {
                 .nickName(signUpForm.getNickname())
                 .email(signUpForm.getEmail())
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
+                .joinedAt(LocalDateTime.now())
                 .build();
         account.generateCheckToken();
 
@@ -60,7 +61,6 @@ public class AccountService implements UserDetailsService {
     }
 
     public void completeLogin(Account account) {
-        account.setJoinedAt(LocalDateTime.now());
         account.setEmailVerified(true);
         login(account);
     }

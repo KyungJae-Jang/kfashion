@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
@@ -42,8 +43,7 @@ public class Account {
         this.emailCheckToken = UUID.randomUUID().toString();
     }
 
-    public LocalDateTime getJoinedAt() {
-        return joinedAt;
-    }   // TODO change formatting
-
+    public String getStringJoinedAt(){
+        return joinedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 }

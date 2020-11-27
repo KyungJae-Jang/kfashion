@@ -33,7 +33,7 @@
         <div class="col-sm-2 border border-white mx-4 px-0 py-0">
             <a class="btn btn-secondary btn-lg btn-block active"
                role="button" aria-pressed="true"
-               href="#">비밀번호 변경</a>
+               href="#" th:href="@{/profile/change-password}">비밀번호 변경</a>
         </div>
         <div class="col-sm-6 mx-4 pt-2">
             <span th:text="${account.getEmail()}">email</span>
@@ -43,7 +43,7 @@
         <div class="col-sm-2 border border-white mx-4 px-0 py-0">
             <a class="btn btn-danger btn-lg btn-block active"
                role="button" aria-pressed="true"
-               href="#">회원 탈퇴</a>
+               href="#" th:href="@{/profile/delete-account}">회원 탈퇴</a>
         </div>
         <div class="col-sm-6 mx-4 pt-2">
             <h4>닉네임</h4>
@@ -64,8 +64,7 @@
     <div class="row justify-content-center py-1">
         <div class="col-sm-2 mx-4"></div>
         <div class="col-sm-6 mx-4 pt-1">
-            <span th:text="${account.getJoinedAt()}">joinedAt</span>
-            <span th:if="${account != null && !account.emailVerified}">회원가입을 완료하세요.</span>
+            <span th:text="${account.getStringJoinedAt()}">joinedAt</span>
         </div>
     </div>
 
