@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head"></head>
 <body class="bg-light">
     <div th:replace="fragments :: navbar"></div>
     <div class="alert alert-danger container" role="alert" th:if="${account != null && !account.emailVerified}">
         K-Fashion 가입을 완료하려면
         <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+        1개월내에 가입을 완료하지 않으면 강제탈퇴 됩니다.
     </div>
     <div class="container">
         <div th:replace="fragments :: footer"></div>

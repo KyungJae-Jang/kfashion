@@ -28,6 +28,8 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
+    private LocalDateTime confirmDeadLine;
+
     private boolean emailVerified;  // TODO 미인증시 자동 탈퇴
 
     private String emailCheckToken;
@@ -39,4 +41,9 @@ public class Account {
     public void generateCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
     }
+
+    public LocalDateTime getJoinedAt() {
+        return joinedAt;
+    }   // TODO change formatting
+
 }

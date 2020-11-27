@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments :: navbar"></div>
+<div class="alert alert-danger container" role="alert" th:if="${account != null && !account.emailVerified}">
+    K-Fashion 가입을 완료하려면
+    <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+    1개월내에 가입을 완료하지 않으면 강제탈퇴 됩니다.
+</div>
+<div class="container">
+    <form class="needs-validation" method="post"
+          th:action="@{/profile/change-info}" th:object="${changeInfoForm}" novalidate>
+        <div class="row justify-content-center mt-5">
+            <div class="col-sm-2 border border-white mx-4 px-0 py-0">
+                <a class="btn btn-secondary btn-lg btn-block active"
+                   role="button" aria-pressed="true"
+                   href="#" th:href="@{/profile/account-info}">회원정보</a>
+            </div>
+            <div class="col-sm-6 mx-4 pl-0">
+                <h3>회원정보 변경</h3>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-2 border border-white mx-4 px-0 py-0">
+                <a class="btn btn-primary btn-lg btn-block active"
+                   role="button" aria-pressed="true"
+                   href="#" th:href="@{/profile/change-info}">회원정보 변경</a>
+            </div>
+            <div class="col-sm-6 mx-4 pt-2">
+                <h4>이메일</h4>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-2 border border-white mx-4 px-0 py-0">
+                <a class="btn btn-secondary btn-lg btn-block active"
+                   role="button" aria-pressed="true"
+                   href="#">비밀번호 변경</a>
+            </div>
+            <div class="col-sm-6 mx-4 input-group">
+                <input class="form-control" type="text" id="email"
+                       th:placeholder="${account.getEmail()}" aria-describedby="inputGroup-sizing-default" disabled>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-2 border border-white mx-4 px-0 py-0">
+                <a class="btn btn-danger btn-lg btn-block active"
+                   role="button" aria-pressed="true"
+                   href="#">회원 탈퇴</a>
+            </div>
+            <div class="col-sm-6 mx-4 pt-3">
+                <h4>닉네임</h4>
+            </div>
+        </div>
+        <div class="form-group row justify-content-center pt-1 pb-2 mb-0">
+            <div class="col-sm-2 mx-4"></div>
+            <div class="col-sm-6 mx-4 pt-1 input-group">
+                <input type="text" class="form-control" id="nickname"
+                       th:field="*{nickname}" minlength="3" maxlength="20"
+                       aria-describedby="inputGroup-sizing-default" required>
+            </div>
+        </div>
+        <div class="form-group row justify-content-center mt-0">
+            <div class="col-sm-2 mx-4"></div>
+            <div class="col-sm-6 mx-4">
+                <small class="form-text text-muted">
+                    공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요.</small>
+                <small class="invalid-feedback">닉네임 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('nickname')}"
+                       th:errors="*{nickname}">NickName Error</small>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-2 mx-4"></div>
+            <div class="col-sm-6 mx-4 pt-3">
+                <h4>알림설정</h4>
+            </div>
+        </div>
+        <div class="form-group row justify-content-center py-1">
+            <div class="col-sm-2 mx-4"></div>
+            <div class="col-sm-6 mx-4 pt-1">
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" th:field="*{commentPostedByEmail}" id="commentPostedByEmail">
+                    <label class="custom-control-label" for="commentPostedByEmail">이메일로 받기</label>
+                </div>
+                <div class="custom-control custom-switch custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" th:field="*{commentPostedByWeb}" id="commentPostedByWeb">
+                    <label class="custom-control-label" for="commentPostedByWeb">웹으로 받기</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row justify-content-center py-1">
+            <div class="col-sm-2 mx-4"></div>
+            <div class="col-sm-6 mx-4 pt-1">
+                <button type="submit" class="btn btn-primary btn-block">수정하기</button>
+            </div>
+        </div>
+    </form>
+
+    <div th:replace="fragments :: footer"></div>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</div>
+</body>
+</html>

@@ -60,8 +60,9 @@
                             <i class="fa fa-user-circle"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-lg-right text-center" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">마이페이지</a>
-                            <a class="dropdown-item" href="#">2</a>
+                            <a class="dropdown-item" href="#" th:href="@{/profile/account-info}">마이페이지</a>
+                            <a class="dropdown-item" href="#">작성글</a>
+                            <a class="dropdown-item" href="#">작성댓글</a>
                             <div class="dropdown-divider"></div>
                             <form th:action="@{/logout}" method="post">
                                 <button type="submit" class="dropdown-item">로그아웃</button>
