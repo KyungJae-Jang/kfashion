@@ -17,6 +17,8 @@ public class AccountController {
     @Autowired
     SignUpFormValidator signUpFormValidator;
     @Autowired
+    FindPwdFormValidator findPwdFormValidator;
+    @Autowired
     AccountService accountService;
     @Autowired
     AccountRepository accountRepository;
@@ -25,6 +27,11 @@ public class AccountController {
     @InitBinder("signUpForm")
     public void signUpInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(signUpFormValidator);
+    }
+
+    @InitBinder("findPwdForm")
+    public void findPwdInitBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(findPwdFormValidator);
     }
 
     @GetMapping("/sign-up")
@@ -50,7 +57,7 @@ public class AccountController {
     public String checkEmailToken(String email, String token, Model model) {
         Account account = accountRepository.findByEmail(email);
         String view = "account/checked-email";
-        if (!accountRepository.existsByEmail(email)) {
+        if (account == null) {
             model.addAttribute("error", "wrong.email");
             return view;
         }
@@ -80,5 +87,41 @@ public class AccountController {
             model.addAttribute("email", account.getEmail());
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/find-password")
+    public String findPwd(Model model){
+        model.addAttribute("findPwdForm", new FindPwdForm());
+        return "account/find-password";
+    }
+
+    @PostMapping("/find-password")
+    public String findPwdForm(@Valid FindPwdForm findPwdForm,
+                                     Errors errors, Model model){
+        if(errors.hasErrors()){
+            model.addAttribute("findPwdForm", findPwdForm);
+            return "account/find-password";
+        }
+        accountService.sendPwdEmailToken(findPwdForm);
+        return "redirect:/";
+    }
+
+    @GetMapping("/pwd-email-token")
+    public String pwdEmailToken(String email, String token, Model model){
+        Account account = accountRepository.findByEmail(email);
+        String view = "account/found-password";
+
+        if (account == null) {
+            model.addAttribute("error", "wrong.email");
+            return view;
+        }
+        if (!account.getEmailCheckToken().equals(token)) {
+            model.addAttribute("error", "wrong.token");
+            return view;
+        }
+
+        model.addAttribute("email", account.getEmail());
+        accountService.login(account);
+        return view;
     }
 }

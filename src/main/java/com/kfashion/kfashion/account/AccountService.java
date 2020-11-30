@@ -45,7 +45,7 @@ public class AccountService implements UserDetailsService {
 
     public void sendCheckEmailToken(Account newAccount) {
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setSubject("K-Fashion 인증메일");
+        msg.setSubject("K-Fashion 인증 메일");
         msg.setText("/check-email-token?email=" + newAccount.getEmail()
                 + "&token=" + newAccount.getEmailCheckToken());
         javaMailSender.send(msg);
@@ -72,5 +72,15 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException(email);
         }
         return new UserAccount(account);
+    }
+
+    public void sendPwdEmailToken(FindPwdForm findPwdForm) {
+        Account account = accountRepository.findByEmail(findPwdForm.getEmail());
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setSubject("K-Fashion 로그인 메일");
+        msg.setText("/pwd-email-token?email=" + account.getEmail()
+                + "&token=" + account.getEmailCheckToken());
+        javaMailSender.send(msg);
     }
 }
