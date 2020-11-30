@@ -20,7 +20,7 @@ public class ProfileController {
     ChangeInfoFormValidator changeInfoFormValidator;
 
     @Autowired
-    ResetPwFormValidator resetPwFormValidator;
+    ResetPwdFormValidator resetPwdFormValidator;
 
     @Autowired
     DeleteAccountFormValidator deleteAccountFormValidator;
@@ -35,7 +35,7 @@ public class ProfileController {
 
     @InitBinder("resetPwForm")
     public void resetPwInitBinder(WebDataBinder webDataBinder){
-        webDataBinder.addValidators(resetPwFormValidator);
+        webDataBinder.addValidators(resetPwdFormValidator);
     }
 
     @InitBinder("deleteAccountForm")
@@ -73,21 +73,21 @@ public class ProfileController {
     @GetMapping("/profile/change-password")
     public String changePassword(@CurrentUser Account account, Model model){
         model.addAttribute("account", account);
-        model.addAttribute("resetPwForm", new ResetPwForm());
+        model.addAttribute("resetPwdForm", new ResetPwdForm());
         return "profile/change-password";
     }
 
     @PostMapping("/profile/change-password")
     public String changePasswordForm(@CurrentUser Account account,
-                                     @Valid ResetPwForm resetPwForm,
+                                     @Valid ResetPwdForm resetPwdForm,
                                      Errors errors, Model model){
         if(errors.hasErrors()){
             model.addAttribute("account", account);
-            model.addAttribute("resetPwForm", resetPwForm);
+            model.addAttribute("resetPwdForm", resetPwdForm);
             return "profile/change-password";
         }
 
-        profileService.updatePassword(account, resetPwForm);
+        profileService.updatePassword(account, resetPwdForm);
         return "redirect:/profile/account-info";
     }
 

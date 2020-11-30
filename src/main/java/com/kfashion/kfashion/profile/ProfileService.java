@@ -24,8 +24,8 @@ public class ProfileService {
         accountRepository.save(account);
     }
 
-    public void updatePassword(Account account, ResetPwForm resetPwForm){
-        account.setPassword(passwordEncoder.encode(resetPwForm.getPassword()));
+    public void updatePassword(Account account, ResetPwdForm resetPwdForm){
+        account.setPassword(passwordEncoder.encode(resetPwdForm.getPassword()));
         accountRepository.save(account);
     }
 

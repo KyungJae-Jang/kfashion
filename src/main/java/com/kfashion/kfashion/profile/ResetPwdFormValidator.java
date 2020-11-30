@@ -5,16 +5,16 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class ResetPwFormValidator implements Validator {
+public class ResetPwdFormValidator implements Validator {
     @Override
     public boolean supports(Class<?> aClass) {
-        return aClass.isAssignableFrom(ResetPwForm.class);
+        return aClass.isAssignableFrom(ResetPwdForm.class);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
-        ResetPwForm resetPwForm = (ResetPwForm) o;
-        if(!resetPwForm.getPassword().equals(resetPwForm.getPasswordConfirmed())){
+        ResetPwdForm resetPwdForm = (ResetPwdForm) o;
+        if(!resetPwdForm.getPassword().equals(resetPwdForm.getPasswordConfirmed())){
             errors.rejectValue("password", "invalid.password", "새 비밀번호가 일치하지 않습니다.");
         }
     }
