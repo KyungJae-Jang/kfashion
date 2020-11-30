@@ -2,74 +2,61 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head"></head>
 <body class="bg-light">
-<div th:replace="fragments :: navbar"></div>
-<div class="alert alert-danger container" role="alert" th:if="${account != null && !account.emailVerified}">
-    K-Fashion 가입을 완료하려면
-    <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
-    1개월내에 가입을 완료하지 않으면 강제탈퇴 됩니다.
-</div>
-<div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-sm-2 border border-white mx-4 px-0 py-0">
-            <a class="btn btn-primary btn-lg btn-block active"
-               role="button" aria-pressed="true"
-               href="#" th:href="@{/profile/account-info}">회원정보</a>
-        </div>
-        <div class="col-sm-6 mx-4 pl-0">
-            <h3>회원정보</h3>
+    <div th:replace="fragments :: navbar"></div>
+    <div class="alert alert-danger container" role="alert" th:if="${account != null && !account.emailVerified}">
+        K-Fashion 가입을 완료하려면
+        <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+        1개월내에 가입을 완료하지 않으면 강제탈퇴 됩니다.
+    </div>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-2 mx-4 px-0 py-0">
+                <div class="border border-white">
+                    <a class="btn btn-primary btn-lg btn-block active"
+                       role="button" aria-pressed="true"
+                       href="#" th:href="@{/profile/account-info}">회원정보</a>
+                </div>
+                <div class="border border-white">
+                    <a class="btn btn-secondary btn-lg btn-block active"
+                       role="button" aria-pressed="true"
+                       href="#" th:href="@{/profile/change-info}">회원정보 변경</a>
+                </div>
+                <div class="border border-white">
+                    <a class="btn btn-secondary btn-lg btn-block active"
+                       role="button" aria-pressed="true"
+                       href="#" th:href="@{/profile/change-password}">비밀번호 변경</a>
+                </div>
+                <div class="border border-white">
+                    <a class="btn btn-danger btn-lg btn-block active"
+                       role="button" aria-pressed="true"
+                       href="#" th:href="@{/profile/delete-account}">회원 탈퇴</a>
+                </div>
+            </div>
+            <div class="col-lg-6 mx-4">
+                <div class="row">
+                    <div class="col pl-0 pt-1"><h3>회원정보</h3></div>
+                </div>
+                <div class="row">
+                    <div class="col my-3"><h4>이메일</h4></div>
+                </div>
+                <div class="row">
+                    <div class="col"><span th:text="${account.getEmail()}">email</span></div>
+                </div>
+                <div class="row">
+                    <div class="col mt-4 mb-3"><h4>닉네임</h4></div>
+                </div>
+                <div class="row">
+                    <div class="col"><span th:text="${account.getNickName()}">nickName</span></div>
+                </div>
+                <div class="row">
+                    <div class="col mt-4 mb-3"><h4>가입일</h4></div>
+                </div>
+                <div class="row">
+                    <div class="col"><span th:text="${account.getStringJoinedAt()}">joinedAt</span></div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div class="col-sm-2 border border-white mx-4 px-0 py-0">
-            <a class="btn btn-secondary btn-lg btn-block active"
-               role="button" aria-pressed="true"
-               href="#" th:href="@{/profile/change-info}">회원정보 변경</a>
-        </div>
-        <div class="col-sm-6 mx-4 pt-2">
-            <h4>이메일</h4>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-sm-2 border border-white mx-4 px-0 py-0">
-            <a class="btn btn-secondary btn-lg btn-block active"
-               role="button" aria-pressed="true"
-               href="#" th:href="@{/profile/change-password}">비밀번호 변경</a>
-        </div>
-        <div class="col-sm-6 mx-4 pt-2">
-            <span th:text="${account.getEmail()}">email</span>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-sm-2 border border-white mx-4 px-0 py-0">
-            <a class="btn btn-danger btn-lg btn-block active"
-               role="button" aria-pressed="true"
-               href="#" th:href="@{/profile/delete-account}">회원 탈퇴</a>
-        </div>
-        <div class="col-sm-6 mx-4 pt-2">
-            <h4>닉네임</h4>
-        </div>
-    </div>
-    <div class="row justify-content-center pt-1 pb-2">
-        <div class="col-sm-2 mx-4"></div>
-        <div class="col-sm-6 mx-4 pt-1">
-            <span th:text="${account.getNickName()}">nickName</span>
-        </div>
-    </div>
-    <div class="row justify-content-center py-2">
-        <div class="col-sm-2 mx-4"></div>
-        <div class="col-sm-6 mx-4 pt-1">
-            <h4>가입일</h4>
-        </div>
-    </div>
-    <div class="row justify-content-center py-1">
-        <div class="col-sm-2 mx-4"></div>
-        <div class="col-sm-6 mx-4 pt-1">
-            <span th:text="${account.getStringJoinedAt()}">joinedAt</span>
-        </div>
-    </div>
-
-
     <div th:replace="fragments :: footer"></div>
-</div>
 </body>
 </html>

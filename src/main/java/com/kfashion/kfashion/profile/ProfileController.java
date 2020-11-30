@@ -20,7 +20,10 @@ public class ProfileController {
     ChangeInfoFormValidator changeInfoFormValidator;
 
     @Autowired
-    PasswordFormValidator passwordFormValidator;
+    ResetPwFormValidator resetPwFormValidator;
+
+    @Autowired
+    DeleteAccountFormValidator deleteAccountFormValidator;
 
     @Autowired
     ProfileService profileService;
@@ -30,9 +33,14 @@ public class ProfileController {
         webDataBinder.addValidators(changeInfoFormValidator);
     }
 
-    @InitBinder("passwordForm")
-    public void passwordInitBinder(WebDataBinder webDataBinder){
-        webDataBinder.addValidators(passwordFormValidator);
+    @InitBinder("resetPwForm")
+    public void resetPwInitBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(resetPwFormValidator);
+    }
+
+    @InitBinder("deleteAccountForm")
+    public void deleteAccountInitBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(deleteAccountFormValidator);
     }
 
     @GetMapping("/profile/account-info")
@@ -65,22 +73,42 @@ public class ProfileController {
     @GetMapping("/profile/change-password")
     public String changePassword(@CurrentUser Account account, Model model){
         model.addAttribute("account", account);
-        model.addAttribute("passwordForm", new PasswordForm());
+        model.addAttribute("resetPwForm", new ResetPwForm());
         return "profile/change-password";
     }
 
     @PostMapping("/profile/change-password")
     public String changePasswordForm(@CurrentUser Account account,
-                                     @Valid PasswordForm passwordForm,
+                                     @Valid ResetPwForm resetPwForm,
                                      Errors errors, Model model){
         if(errors.hasErrors()){
             model.addAttribute("account", account);
-            model.addAttribute("passwordForm", passwordForm);
+            model.addAttribute("resetPwForm", resetPwForm);
             return "profile/change-password";
         }
 
-        profileService.updatePassword(account, passwordForm);
+        profileService.updatePassword(account, resetPwForm);
         return "redirect:/profile/account-info";
     }
 
+    @GetMapping("/profile/delete-account")
+    public String deleteAccount(@CurrentUser Account account, Model model){
+        model.addAttribute("account", account);
+        model.addAttribute("deleteAccountForm", new DeleteAccountForm(account));
+        return "profile/delete-account";
+    }
+
+    @PostMapping("/profile/delete-account")
+    public String deleteAccountForm(@CurrentUser Account account,
+                                    @Valid DeleteAccountForm deleteAccountForm,
+                                    Errors errors, Model model){
+        if(errors.hasErrors()){
+            model.addAttribute("account", account);
+            model.addAttribute("deleteAccountForm", deleteAccountForm);
+            return "profile/delete-account";
+        }
+
+        profileService.deleteAccount(deleteAccountForm);
+        return "auto-logout";
+    }
 }

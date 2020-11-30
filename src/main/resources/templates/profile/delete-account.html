@@ -1,10 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body class="bg-light">
+    <div th:replace="fragments :: navbar"></div>
+    <div class="alert alert-danger alert-dismissible fade show container" role="alert" th:if="${account != null && !account.emailVerified}">
+        K-Fashion 가입을 완료하려면
+        <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+        1개월내에 가입을 완료하지 않으면 강제탈퇴 됩니다.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="container contents-container">
+        <form class="needs-validation" method="post"
+              th:action="@{/profile/delete-account}" th:object="${deleteAccountForm}" novalidate>
+            <div class="row justify-content-center mt-5">
+                <div class="col-lg-2 mx-4 px-0 py-0">
+                    <div class="border border-white">
+                        <a class="btn btn-secondary btn-lg btn-block active"
+                           role="button" aria-pressed="true"
+                           href="#" th:href="@{/profile/account-info}">회원정보</a>
+                    </div>
+                    <div class="border border-white">
+                        <a class="btn btn-secondary btn-lg btn-block active"
+                           role="button" aria-pressed="true"
+                           href="#" th:href="@{/profile/change-info}">회원정보 변경</a>
+                    </div>
+                    <div class="border border-white">
+                        <a class="btn btn-secondary btn-lg btn-block active"
+                           role="button" aria-pressed="true"
+                           href="#" th:href="@{/profile/change-password}">비밀번호 변경</a>
+                    </div>
+                    <div class="border border-white">
+                        <a class="btn btn-danger btn-lg btn-block active"
+                           role="button" aria-pressed="true"
+                           href="#" th:href="@{/profile/delete-account}">회원 탈퇴</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 mx-4">
+                    <div class="row">
+                        <div class="col pl-0 pt-1">
+                            <h3 class="text-danger">회원탈퇴</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col my-3">
+                            <h4>K-Fashion의 탈퇴를 원하십니까?</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col alert alert-danger" role="alert">
+                            회원탈퇴시 회원 정보가 모두 삭제됩니다.
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mt-2 mb-3"><h4>이메일</h4></div>
+                    </div>
+                    <div class="row">
+                        <div class="col input-group"><span th:text="${account.getEmail()}">email</span>
+                            <input type="text" class="form-control" id="email"
+                                    th:field="*{email}" hidden required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mt-4 mb-3"><h4>닉네임</h4></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span th:text="${account.getNickName()}">nickName</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col mt-4 mb-3"><h4>비밀번호 확인</h4></div>
+                    </div>
+                    <div class="row">
+                        <div class="col input-group">
+                            <input type="password" class="form-control" id="password"
+                                   minlength="8" maxlength="50" th:field="*{password}"
+                                   aria-describedby="inputGroup-sizing-default" required>
+                        </div>
+                    </div>
+                    <div class="row pt-0">
+                        <div class="col">
+                            <small class="form-text text-muted">
+                                비밀번호를 입력하세요.</small>
+                            <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}"
+                                   th:errors="*{password}">Password Error</small>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary btn-block">탈퇴하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:replace="fragments :: footer"></div>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 </body>
 </html>

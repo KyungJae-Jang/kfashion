@@ -24,8 +24,13 @@ public class ProfileService {
         accountRepository.save(account);
     }
 
-    public void updatePassword(Account account, PasswordForm passwordForm){
-        account.setPassword(passwordEncoder.encode(passwordForm.getPassword()));
+    public void updatePassword(Account account, ResetPwForm resetPwForm){
+        account.setPassword(passwordEncoder.encode(resetPwForm.getPassword()));
         accountRepository.save(account);
+    }
+
+    public void deleteAccount(DeleteAccountForm deleteAccountForm) {
+        Account account = accountRepository.findByEmail(deleteAccountForm.getEmail());
+        accountRepository.delete(account);
     }
 }
