@@ -15,6 +15,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
+
     private final BoardService boardService;
 
     @GetMapping("/free-boardWriter")

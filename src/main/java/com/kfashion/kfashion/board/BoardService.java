@@ -12,6 +12,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class BoardService {
+
     private final BoardRepository boardRepository;
 
     public void processNewPost(Account account, BoardForm boardForm) {

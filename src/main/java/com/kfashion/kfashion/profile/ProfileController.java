@@ -17,6 +17,7 @@ import javax.validation.Valid;
 @Controller
 @RequiredArgsConstructor
 public class ProfileController {
+
     private final ChangeInfoFormValidator changeInfoFormValidator;
     private final ResetPwdFormValidator resetPwdFormValidator;
     private final DeleteAccountFormValidator deleteAccountFormValidator;

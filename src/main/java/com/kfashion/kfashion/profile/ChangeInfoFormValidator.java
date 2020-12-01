@@ -10,6 +10,7 @@ import org.springframework.validation.Validator;
 @Component
 @RequiredArgsConstructor
 public class ChangeInfoFormValidator implements Validator {
+
     private final AccountRepository accountRepository;
 
     @Override

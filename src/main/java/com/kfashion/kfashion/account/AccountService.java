@@ -4,13 +4,9 @@ import com.kfashion.kfashion.mail.EmailMessage;
 import com.kfashion.kfashion.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +20,9 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AccountService implements UserDetailsService {
-    @Autowired
-    PasswordEncoder passwordEncoder;
+public class AccountService {
+
+    private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
     private final EmailService emailService;
     private final TemplateEngine templateEngine;
@@ -82,15 +78,6 @@ public class AccountService implements UserDetailsService {
     public void completeLogin(Account account) {
         account.setEmailVerified(true);
         login(account);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(email);
-        if(account == null){
-            throw new UsernameNotFoundException(email);
-        }
-        return new UserAccount(account);
     }
 
     public void sendPwdEmailToken(FindPwdForm findPwdForm) {

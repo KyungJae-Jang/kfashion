@@ -15,6 +15,7 @@ import javax.validation.Valid;
 @Controller
 @RequiredArgsConstructor
 public class AccountController {
+
     private final SignUpFormValidator signUpFormValidator;
     private final FindPwdFormValidator findPwdFormValidator;
     private final AccountService accountService;

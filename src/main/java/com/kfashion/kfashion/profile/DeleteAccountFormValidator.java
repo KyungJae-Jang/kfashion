@@ -14,9 +14,7 @@ import org.springframework.validation.Validator;
 public class DeleteAccountFormValidator implements Validator {
 
     private final AccountRepository accountRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public boolean supports(Class<?> aClass) {
