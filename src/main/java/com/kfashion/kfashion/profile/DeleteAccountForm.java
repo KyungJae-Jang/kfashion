@@ -14,8 +14,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class DeleteAccountForm {
 
-    @Autowired
-    Account account;
+    private Account account;
 
     private String email;
 

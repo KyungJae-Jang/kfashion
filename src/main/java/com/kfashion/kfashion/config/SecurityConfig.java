@@ -1,6 +1,7 @@
 package com.kfashion.kfashion.config;
 
 import com.kfashion.kfashion.account.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    AccountService accountService;
+    private final AccountService accountService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

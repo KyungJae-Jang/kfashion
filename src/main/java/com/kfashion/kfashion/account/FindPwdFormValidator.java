@@ -1,15 +1,15 @@
 package com.kfashion.kfashion.account;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
+@RequiredArgsConstructor
 public class FindPwdFormValidator implements Validator {
-
-    @Autowired
-    AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     public boolean supports(Class<?> aClass) {

@@ -15,7 +15,6 @@ import javax.mail.internet.MimeMessage;
 @Profile("dev")
 @RequiredArgsConstructor
 public class HtmlEmailService implements EmailService{
-
     private final JavaMailSender javaMailSender;
 
     @Override

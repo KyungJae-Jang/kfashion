@@ -1,16 +1,16 @@
 package com.kfashion.kfashion.profile;
 
 import com.kfashion.kfashion.account.AccountRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
+@RequiredArgsConstructor
 public class ChangeInfoFormValidator implements Validator {
-
-    @Autowired
-    AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     public boolean supports(Class<?> aClass) {

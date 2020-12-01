@@ -2,6 +2,7 @@ package com.kfashion.kfashion.profile;
 
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.AccountRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,13 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProfileService {
-
-    @Autowired
-    AccountRepository accountRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void updateInfo(Account account, ChangeInfoForm changeInfoForm) {
         account.setNickName(changeInfoForm.getNewNickName());

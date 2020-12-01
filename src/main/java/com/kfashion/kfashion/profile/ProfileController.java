@@ -2,6 +2,7 @@ package com.kfashion.kfashion.profile;
 
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.CurrentUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,19 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
+@RequiredArgsConstructor
 public class ProfileController {
-
-    @Autowired
-    ChangeInfoFormValidator changeInfoFormValidator;
-
-    @Autowired
-    ResetPwdFormValidator resetPwdFormValidator;
-
-    @Autowired
-    DeleteAccountFormValidator deleteAccountFormValidator;
-
-    @Autowired
-    ProfileService profileService;
+    private final ChangeInfoFormValidator changeInfoFormValidator;
+    private final ResetPwdFormValidator resetPwdFormValidator;
+    private final DeleteAccountFormValidator deleteAccountFormValidator;
+    private final ProfileService profileService;
 
     @InitBinder("changeInfoForm")
     public void changeInfoInitBinder(WebDataBinder webDataBinder){

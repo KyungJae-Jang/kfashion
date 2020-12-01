@@ -15,8 +15,7 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class ChangeInfoForm {
 
-    @Autowired
-    Account account;
+    private Account account;
 
     @NotBlank
     @Length(min = 3, max = 28)

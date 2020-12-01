@@ -2,6 +2,7 @@ package com.kfashion.kfashion.account;
 
 import com.kfashion.kfashion.mail.EmailMessage;
 import com.kfashion.kfashion.mail.EmailService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,11 +23,12 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
-    @Autowired AccountRepository accountRepository;
-    @Autowired EmailService emailService;
-    @Autowired PasswordEncoder passwordEncoder;
-    @Autowired TemplateEngine templateEngine;
+    private final AccountRepository accountRepository;
+    private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
+    private final TemplateEngine templateEngine;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account account = createNewAccount(signUpForm);
