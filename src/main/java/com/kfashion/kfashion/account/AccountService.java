@@ -25,9 +25,10 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
+    @Autowired
+    PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
     private final EmailService emailService;
-    private final PasswordEncoder passwordEncoder;
     private final TemplateEngine templateEngine;
 
     public Account processNewAccount(SignUpForm signUpForm) {

@@ -12,6 +12,10 @@
             height: 100%;
             margin: 0;
         }
+        a:link {text-decoration: none; color: #000000;}
+        a:visited {text-decoration: none; color: #000000;}
+        a:active {text-decoration: none; color: #000000;}
+        a:hover {text-decoration: none; color: #000000;}
     </style>
 </head>
 <body>
@@ -32,7 +36,7 @@
                     <a class="nav-link" href="#">연예인 패션</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">자유게시판</a>
+                    <a class="nav-link" href="#" th:href="@{/free-boardList}">자유게시판</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">세일 정보</a>
