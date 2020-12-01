@@ -75,10 +75,4 @@ class ProfileControllerTest {
                 .andExpect(model().attributeExists("error"))
                 .andExpect(view().name("account/found-password"));
     }
-
-    @Test
-    @WithMockUser
-    public void 회원정보_변경_정상() throws Exception {
-
-    }
 }

@@ -21,19 +21,18 @@ public class ChangeInfoForm {
     @NotBlank
     @Length(min = 3, max = 28)
     @Pattern(regexp = "^[a-zA-z0-9ㄱ-ㅎ가-힇_-]{3,28}$")
-    private String nickname;
+    private String newNickName;
 
-    private String email;
+    private String oldNickName;
 
     private boolean commentPostedByEmail;
 
     private boolean commentPostedByWeb;
 
     public ChangeInfoForm(Account account){
-        this.nickname = account.getNickName();
-        this.email = account.getEmail();
+        this.newNickName = account.getNickName();
+        this.oldNickName = account.getNickName();
         this.commentPostedByEmail = account.isCommentPostedByEmail();
         this.commentPostedByWeb = account.isCommentPostedByWeb();
     }
-
 }

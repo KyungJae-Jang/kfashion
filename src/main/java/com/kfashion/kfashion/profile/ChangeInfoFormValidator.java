@@ -20,8 +20,10 @@ public class ChangeInfoFormValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         ChangeInfoForm changeInfoForm = (ChangeInfoForm) o;
-        if(accountRepository.existsByNickName(changeInfoForm.getNickname())){
-            errors.rejectValue("nickname", "invalid.nickname", "이미 존재하는 닉네임 입니다.");
+        if(!changeInfoForm.getOldNickName().equals(changeInfoForm.getNewNickName())){
+            if(accountRepository.existsByNickName(changeInfoForm.getNewNickName())){
+                errors.rejectValue("newNickName", "invalid.nickname", "이미 존재하는 닉네임 입니다.");
+            }
         }
     }
 }

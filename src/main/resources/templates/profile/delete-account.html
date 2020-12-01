@@ -57,7 +57,10 @@
                         <div class="col mt-2 mb-3"><h4>이메일</h4></div>
                     </div>
                     <div class="row">
-                        <div class="col input-group"><span th:text="${account.getEmail()}">email</span>
+                        <div class="col input-group">
+                            <input class="form-control" type="text"
+                                   th:placeholder="${account.getEmail()}"
+                                   aria-describedby="inputGroup-sizing-default" disabled>
                             <input type="text" class="form-control" id="email"
                                     th:field="*{email}" hidden required>
                         </div>
@@ -66,7 +69,11 @@
                         <div class="col mt-4 mb-3"><h4>닉네임</h4></div>
                     </div>
                     <div class="row">
-                        <div class="col"><span th:text="${account.getNickName()}">nickName</span></div>
+                        <div class="col">
+                            <input class="form-control" type="text"
+                                   th:placeholder="${account.getNickName()}"
+                                   aria-describedby="inputGroup-sizing-default" disabled>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col mt-4 mb-3"><h4>비밀번호 확인</h4></div>
