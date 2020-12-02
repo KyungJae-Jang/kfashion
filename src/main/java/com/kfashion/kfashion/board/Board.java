@@ -20,9 +20,11 @@ public class Board {
     @Lob
     private String contents;
 
-    private String image;
+    private String images;
 
     private String nickname;
+
+    private String boardName;
 
     private LocalDateTime postingTime;
 
@@ -32,4 +34,13 @@ public class Board {
         return postingTime.format(DateTimeFormatter.ofPattern("MM-dd HH:mm"));
     }
 
+    public void countView(){
+        this.view = ++view;
+    }
+
+    public void updateBoard(String subject, String contents, String boardName){
+        this.subject = subject;
+        this.contents = contents;
+        this.boardName = boardName;
+    }
 }

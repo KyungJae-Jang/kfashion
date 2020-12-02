@@ -5,7 +5,7 @@
     <div th:replace="fragments :: navbar"></div>
     <div class="container">
         <div class="py-5 text-center">
-            <h2>자유게시판</h2>
+            <h2>자유 게시판</h2>
         </div>
         <div class="row justify-content-center mx-1">
             <div class="col-lg px-0">
@@ -23,7 +23,7 @@
                     <tr th:each="board : ${boardList}">
                         <th th:text="${board.getId()}" style="width: 5%" class="text-center" scope="row">0</th>
                         <td style="width: 55%" class="text-center">
-                            <a href="#" th:text="${board.getSubject()}">Hi</a>
+                            <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}">Hi</a>
                         </td>
                         <td th:text="${board.getNickname()}" style="width: 15%" class="text-center">KyungJae</td>
                         <td th:text="${board.getStringPostingTime()}" style="width: 15%" class="text-center">2020-11-11</td>
@@ -37,7 +37,7 @@
             <div class="col-lg-4 px-0">
                 <a class="btn btn-primary active"
                    role="button" aria-pressed="true"
-                   href="#" th:href="@{/free-boardWriter}">글쓰기</a>
+                   href="#" th:href="@{/board-write}">글쓰기</a>
             </div>
         </div>
     </div>

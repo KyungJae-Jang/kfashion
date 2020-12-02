@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body class="bg-light">
+    <div th:replace="fragments :: navbar"></div>
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2>게시글 수정</h2>
+        </div>
+        <form class="needs-validation mx-3" method="post" action="#" th:action="@{/board-update}"
+              th:object="${boardForm}" novalidate>
+            <div class="row justify-content-center">
+                <div class="col-lg-8 px-0">
+                    <input type="text" class="form-control" id="subject" th:field="*{subject}"
+                           placeholder="제목을 입력해주세요." aria-describedby="inputGroup-sizing-default" minlength="1" required>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-1">
+                <div class="col-lg-8 px-0">
+                    <select class="form-control" th:field="*{boardName}">
+                        <option value="daily">데일리룩</option>
+                        <option value="celeb">연예인 패션</option>
+                        <option value="free">자유게시판</option>
+                        <option value="sale">세일 정보</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-1">
+                <div class="col-lg-8 px-0">
+                        <textarea class="form-control" id="contents" th:field="*{contents}"
+                                  rows="15" minlength="1" required></textarea>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-2">
+                <div class="col-lg-8 px-0 custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01"
+                           th:field="*{image}" aria-describedby="inputGroupFileAddon01">
+                    <label class="custom-file-label" for="inputGroupFile01">사진 파일 첨부</label>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-4 px-0">
+                    <button type="submit" class="btn btn-primary btn-block">수정</button>
+                    <input type="text" class="form-control" th:field="*{boardId}" hidden>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:replace="fragments :: footer"></div>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html>

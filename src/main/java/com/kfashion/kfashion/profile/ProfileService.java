@@ -3,7 +3,6 @@ package com.kfashion.kfashion.profile;
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +16,13 @@ public class ProfileService {
     private final PasswordEncoder passwordEncoder;
 
     public void updateInfo(Account account, ChangeInfoForm changeInfoForm) {
-        account.setNickName(changeInfoForm.getNewNickName());
-        account.setCommentPostedByEmail(changeInfoForm.isCommentPostedByEmail());
-        account.setCommentPostedByWeb(changeInfoForm.isCommentPostedByWeb());
+        account.updateInfo(changeInfoForm.getNewNickName(),
+                changeInfoForm.isCommentPostedByEmail(), changeInfoForm.isCommentPostedByWeb());
         accountRepository.save(account);
     }
 
     public void updatePassword(Account account, ResetPwdForm resetPwdForm){
-        account.setPassword(passwordEncoder.encode(resetPwdForm.getPassword()));
+        account.updatePassword(passwordEncoder.encode(resetPwdForm.getPassword()));
         accountRepository.save(account);
     }
 

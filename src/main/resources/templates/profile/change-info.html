@@ -13,28 +13,28 @@
     </div>
     <div class="container">
         <form class="needs-validation" method="post"
-              th:action="@{/profile/change-info}" th:object="${changeInfoForm}" novalidate>
+              th:action="@{/change-info}" th:object="${changeInfoForm}" novalidate>
             <div class="row justify-content-center mt-5">
                 <div class="col-lg-2 mx-4 px-0 py-0">
                     <div class="border border-white">
                         <a class="btn btn-secondary btn-lg btn-block active"
                            role="button" aria-pressed="true"
-                           href="#" th:href="@{/profile/account-info}">회원정보</a>
+                           href="#" th:href="@{/account-info}">회원정보</a>
                     </div>
                     <div class="border border-white">
                         <a class="btn btn-primary btn-lg btn-block active"
                            role="button" aria-pressed="true"
-                           href="#" th:href="@{/profile/change-info}">회원정보 변경</a>
+                           href="#" th:href="@{/change-info}">회원정보 변경</a>
                     </div>
                     <div class="border border-white">
                         <a class="btn btn-secondary btn-lg btn-block active"
                            role="button" aria-pressed="true"
-                           href="#" th:href="@{/profile/change-password}">비밀번호 변경</a>
+                           href="#" th:href="@{/change-password}">비밀번호 변경</a>
                     </div>
                     <div class="border border-white">
                         <a class="btn btn-danger btn-lg btn-block active"
                            role="button" aria-pressed="true"
-                           href="#" th:href="@{/profile/delete-account}">회원 탈퇴</a>
+                           href="#" th:href="@{/delete-account}">회원 탈퇴</a>
                     </div>
                 </div>
                 <div class="col-lg-6 mx-4">

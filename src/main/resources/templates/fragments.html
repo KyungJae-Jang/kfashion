@@ -16,6 +16,20 @@
         a:visited {text-decoration: none; color: #000000;}
         a:active {text-decoration: none; color: #000000;}
         a:hover {text-decoration: none; color: #000000;}
+        textarea:focus,
+        textarea.form-control:focus,
+        input.form-control:focus,
+        input[type=text]:focus,
+        input[type=password]:focus,
+        input[type=email]:focus,
+        input[type=number]:focus,
+        [type=text].form-control:focus,
+        [type=password].form-control:focus,
+        [type=email].form-control:focus,
+        [type=tel].form-control:focus,
+        [contenteditable].form-control:focus {
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -30,16 +44,16 @@
         <div class="collapse navbar-collapse mr-2" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">데일리룩</a>
+                    <a class="nav-link" href="#" th:href="@{/board-free(boardName=daily)}">데일리룩</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">연예인 패션</a>
+                    <a class="nav-link" href="#" th:href="@{/board-free(boardName=celeb)}">연예인 패션</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/free-boardList}">자유게시판</a>
+                    <a class="nav-link" href="#" th:href="@{/board-free(boardName=free)}">자유게시판</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">세일 정보</a>
+                    <a class="nav-link" href="#" th:href="@{/board-saleinfo(boardName=sale)}">세일 정보</a>
                 </li>
             </ul>
 
@@ -70,8 +84,8 @@
                         <i class="fa fa-user-circle"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg-right text-center" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#" th:href="@{/profile/account-info}">마이페이지</a>
-                        <a class="dropdown-item" href="#">작성글</a>
+                        <a class="dropdown-item" href="#" th:href="@{/account-info}">마이페이지</a>
+                        <a class="dropdown-item" href="#" th:href="@{/account-info}">작성글</a>
                         <a class="dropdown-item" href="#">작성댓글</a>
                         <div class="dropdown-divider"></div>
                         <form th:action="@{/logout}" method="post">

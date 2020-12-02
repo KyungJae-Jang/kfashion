@@ -3,7 +3,6 @@ package com.kfashion.kfashion.profile;
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.CurrentUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -38,20 +37,20 @@ public class ProfileController {
         webDataBinder.addValidators(deleteAccountFormValidator);
     }
 
-    @GetMapping("/profile/account-info")
+    @GetMapping("/account-info")
     public String accountInfo(@CurrentUser Account account, Model model){
         model.addAttribute("account", account);
         return "profile/account-info";
     }
 
-    @GetMapping("/profile/change-info")
+    @GetMapping("/change-info")
     public String changeInfo(@CurrentUser Account account, Model model){
         model.addAttribute("account", account);
         model.addAttribute("changeInfoForm", new ChangeInfoForm(account));
         return "profile/change-info";
     }
 
-    @PostMapping("/profile/change-info")
+    @PostMapping("/change-info")
     public String changeInfoForm(@CurrentUser Account account,
                                  @Valid ChangeInfoForm changeInfoForm,
                                  Errors errors, Model model){
@@ -62,17 +61,17 @@ public class ProfileController {
         }
 
         profileService.updateInfo(account, changeInfoForm);
-        return "redirect:/profile/account-info";
+        return "redirect:/account-info";
     }
 
-    @GetMapping("/profile/change-password")
+    @GetMapping("/change-password")
     public String changePassword(@CurrentUser Account account, Model model){
         model.addAttribute("account", account);
         model.addAttribute("resetPwdForm", new ResetPwdForm());
         return "profile/change-password";
     }
 
-    @PostMapping("/profile/change-password")
+    @PostMapping("/change-password")
     public String changePasswordForm(@CurrentUser Account account,
                                      @Valid ResetPwdForm resetPwdForm,
                                      Errors errors, Model model){
@@ -83,17 +82,17 @@ public class ProfileController {
         }
 
         profileService.updatePassword(account, resetPwdForm);
-        return "redirect:/profile/account-info";
+        return "redirect:/account-info";
     }
 
-    @GetMapping("/profile/delete-account")
+    @GetMapping("/delete-account")
     public String deleteAccount(@CurrentUser Account account, Model model){
         model.addAttribute("account", account);
         model.addAttribute("deleteAccountForm", new DeleteAccountForm(account));
         return "profile/delete-account";
     }
 
-    @PostMapping("/profile/delete-account")
+    @PostMapping("/delete-account")
     public String deleteAccountForm(@CurrentUser Account account,
                                     @Valid DeleteAccountForm deleteAccountForm,
                                     Errors errors, Model model){

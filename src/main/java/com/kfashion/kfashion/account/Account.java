@@ -46,4 +46,14 @@ public class Account {
     public String getStringJoinedAt(){
         return joinedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
+
+    public void updatePassword(String password){
+        this.password = password;
+    }
+
+    public void updateInfo(String nickName, boolean commentPostedByEmail, boolean commentPostedByWeb){
+        this.nickName = nickName;
+        this.commentPostedByEmail = commentPostedByEmail;
+        this.commentPostedByWeb = commentPostedByWeb;
+    }
 }

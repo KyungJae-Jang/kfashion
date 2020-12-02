@@ -12,29 +12,29 @@
         </button>
     </div>
     <div class="container contents-container">
-        <form class="needs-validation" method="post"
-              th:action="@{/profile/delete-account}" th:object="${deleteAccountForm}" novalidate>
+        <form class="needs-validation" method="post" id="frm"
+              th:action="@{/delete-account}" th:object="${deleteAccountForm}" novalidate>
             <div class="row justify-content-center mt-5">
                 <div class="col-lg-2 mx-4 px-0 py-0">
                     <div class="border border-white">
                         <a class="btn btn-secondary btn-lg btn-block active"
                            role="button" aria-pressed="true"
-                           href="#" th:href="@{/profile/account-info}">회원정보</a>
+                           href="#" th:href="@{/account-info}">회원정보</a>
                     </div>
                     <div class="border border-white">
                         <a class="btn btn-secondary btn-lg btn-block active"
                            role="button" aria-pressed="true"
-                           href="#" th:href="@{/profile/change-info}">회원정보 변경</a>
+                           href="#" th:href="@{/change-info}">회원정보 변경</a>
                     </div>
                     <div class="border border-white">
                         <a class="btn btn-secondary btn-lg btn-block active"
                            role="button" aria-pressed="true"
-                           href="#" th:href="@{/profile/change-password}">비밀번호 변경</a>
+                           href="#" th:href="@{/change-password}">비밀번호 변경</a>
                     </div>
                     <div class="border border-white">
                         <a class="btn btn-danger btn-lg btn-block active"
                            role="button" aria-pressed="true"
-                           href="#" th:href="@{/profile/delete-account}">회원 탈퇴</a>
+                           href="#" th:href="@{/delete-account}">회원 탈퇴</a>
                     </div>
                 </div>
                 <div class="col-lg-6 mx-4">
@@ -96,12 +96,33 @@
                     </div>
                     <div class="row mt-4">
                         <div class="col">
-                            <button type="submit" class="btn btn-primary btn-block">탈퇴하기</button>
+                            <button type="button" data-toggle="modal" data-target="#myModal"
+                                    class="btn btn-primary btn-block">탈퇴하기</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">회원탈퇴</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    계정을 정말 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" onclick="submit()" >확인</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div th:replace="fragments :: footer"></div>
     <script>
@@ -123,6 +144,11 @@
                 });
             }, false);
         })();
+    </script>
+    <script type="text/javascript">
+        function submit(){
+            document.getElementById("frm").submit();
+        }
     </script>
 </body>
 </html>

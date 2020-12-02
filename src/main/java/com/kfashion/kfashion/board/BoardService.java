@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -18,9 +19,10 @@ public class BoardService {
     public void processNewPost(Account account, BoardForm boardForm) {
         Board board = Board.builder()
                 .nickname(account.getNickName())
+                .boardName(boardForm.getBoardName())
                 .subject(boardForm.getSubject())
                 .contents(boardForm.getContents())
-                .image(boardForm.getImage())
+                .images(boardForm.getImage())
                 .postingTime(LocalDateTime.now())
                 .view(0)
                 .build();
@@ -29,7 +31,28 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<Board> findAllPosts() {
-        return boardRepository.findAll();
+    public List<Board> findAllPostsByBoardName(String boardName) {
+        return boardRepository.findAllPostByBoardName(boardName);
+    }
+
+    @Transactional(readOnly = true)
+    public Board getBoardById(Long id) {
+        Optional<Board> board = boardRepository.findById(id);
+        return board.orElse(null);
+    }
+
+    public void setBoardCountView(Board board) {
+        board.countView();
+        boardRepository.save(board);
+    }
+
+    public void updateBoard(BoardForm boardForm) {
+        Board board = getBoardById(boardForm.getBoardId());
+        board.updateBoard(boardForm.getSubject(), boardForm.getContents(), boardForm.getImage());
+        boardRepository.save(board);
+    }
+
+    public void deleteBoard(Long id) {
+        boardRepository.deleteById(id);
     }
 }

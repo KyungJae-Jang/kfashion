@@ -24,7 +24,8 @@
                     <input type="password" class="form-control" id="password" name="password"
                            minlength="8" maxlength="50" required>
                     <small class="invalid-feedback">패스워드를 입력하세요.</small>
-                    <small>패스워드가 기억나지 않는다면? <a href="#" th:href="@{/find-password}">패스워드 찾기</a></small>
+                    <small>패스워드가 기억나지 않는다면?
+                        <a href="#" th:href="@{/find-password}" class="text-primary">패스워드 찾기</a></small>
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="rememberme" name="remember-me">
@@ -33,7 +34,8 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">로그인</button>
                 </div>
-                <small>K-Fashion 계정이 없다면? <a href="#" th:href="@{/sign-up}">회원가입</a></small>
+                <small>K-Fashion 계정이 없다면?
+                    <a href="#" th:href="@{/sign-up}" class="text-primary">회원가입</a></small>
             </form>
         </div>
     </div>
