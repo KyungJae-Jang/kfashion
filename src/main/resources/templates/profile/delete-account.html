@@ -3,15 +3,15 @@
 <head th:replace="fragments :: head"></head>
 <body class="bg-light">
     <div th:replace="fragments :: navbar"></div>
-    <div class="alert alert-danger alert-dismissible fade show container" role="alert" th:if="${account != null && !account.emailVerified}">
-        K-Fashion 가입을 완료하려면
-        <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
-        1개월내에 가입을 완료하지 않으면 강제탈퇴 됩니다.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
     <div class="container contents-container">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${account != null && !account.emailVerified}">
+            K-Fashion 가입을 완료하려면
+            <a href="#" th:href="@{/check-email}" class="alert-link">계정 인증 이메일을 확인</a>하세요.
+            1개월내에 가입을 완료하지 않으면 강제탈퇴 됩니다.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         <form class="needs-validation" method="post" id="frm"
               th:action="@{/delete-account}" th:object="${deleteAccountForm}" novalidate>
             <div class="row justify-content-center mt-5">
