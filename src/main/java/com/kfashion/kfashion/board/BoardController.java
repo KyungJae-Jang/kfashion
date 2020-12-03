@@ -36,17 +36,28 @@ public class BoardController {
 
         boardService.processNewPost(account, boardForm);
 
-        return "redirect:/board-free?boardName=" + boardForm.getBoardName();
+        return "redirect:/board-list?boardName=" + boardForm.getBoardName();
     }
 
-    @GetMapping("/board-free")
-    public String boardFree(@RequestParam(value = "boardName") String boardName, Model model){
+    @GetMapping("/board-list")
+    public String boardList(@RequestParam(value = "boardName") String boardName, Model model){
 
         List<Board> boardList = boardService.findAllPostsByBoardName(boardName);
         model.addAttribute("boardList", boardList);
+        model.addAttribute("boardName", boardName);
 
-        return "board/board-free";
+        return "board/board-list";
     }
+
+//    @GetMapping("/board-card")
+//    public String boardCard(@RequestParam(value = "boardName") String boardName, Model model){
+//
+//        List<Board> boardCard = boardService.findAllPostsByBoardName(boardName);
+//        model.addAttribute("boardCard", boardCard);
+//        model.addAttribute("boardName", boardName);
+//
+//        return "board/board-card";
+//    }
 
     @GetMapping("/board-view")
     public String boardView(@RequestParam(value = "boardId") Long id, Model model){
@@ -87,21 +98,12 @@ public class BoardController {
 
         boardService.deleteBoard(id);
 
-        return "redirect:/board-free?boardName=" + boardName;
-    }
-
-    @GetMapping("/board-sale")
-    public String boardList(@RequestParam(value = "boardName") String boardName, Model model){
-
-        List<Board> boardList = boardService.findAllPostsByBoardName(boardName);
-        model.addAttribute("boardList", boardList);
-
-        return "board/board-sale";
+        return "redirect:/board-list?boardName=" + boardName;
     }
 }
 
-
-// TODO 모달 추가 본문이 띄어쓰기가 되도록 수정, 최종 점검 및 커밋
-// TODO View 리팩토링, 조회뷰, 업데이트뷰, 게시글 수정, 삭제
 // TODO boardWriter footer 겹침 고치기
+// TODO 데일리룩, 연예인패션 board view 만들기
 // TODO 답글, 댓글, 대댓글, 페이징, 검색, 사진파일 업로드
+
+// TODO board list page 고치기

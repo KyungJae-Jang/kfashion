@@ -5,7 +5,7 @@
     <div th:replace="fragments :: navbar"></div>
     <div class="container">
         <div class="py-5 text-center">
-            <h2>게시글</h2>
+            <h2 th:text="${board.getBoardName()}">게시글</h2>
         </div>
         <div class="row justify-content-center mb-4">
             <div class="col-lg-8 px-0">
@@ -26,7 +26,7 @@
         <div class="row justify-content-center mt-2">
             <div class="col-lg-8 px-0 pt-2 border-top">
                 <p th:utext="*{#strings.replace(board.getContents(),
-                T(System).getProperty('line.separator'), '&lt;br /&gt;')}"/>
+                T(System).getProperty('line.separator'), '&lt;br /&gt;')}"></p>
             </div>
         </div>
         <form class="needs-validation" method="post" action="#" novalidate>
@@ -51,7 +51,7 @@
                    href="#">답글</a>
                 <a class="btn btn-primary active"
                    role="button" aria-pressed="true"
-                   href="#" th:href="@{/board-free(boardName=${board.getBoardName()})}">목록</a>
+                   href="#" th:href="@{/board-list(boardName=${board.getBoardName()})}">목록</a>
             </div>
             <div class="col-auto px-0">
                 <a class="btn btn-primary active"
