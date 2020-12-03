@@ -38,9 +38,10 @@ public class Board {
         this.view = ++view;
     }
 
-    public void updateBoard(String subject, String contents, String boardName){
+    public void updateBoard(String boardName, String subject, String contents, String images){
+        this.boardName = boardName;
         this.subject = subject;
         this.contents = contents;
-        this.boardName = boardName;
+        this.images = images;
     }
 }

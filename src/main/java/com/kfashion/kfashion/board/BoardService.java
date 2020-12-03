@@ -48,7 +48,7 @@ public class BoardService {
 
     public void updateBoard(BoardForm boardForm) {
         Board board = getBoardById(boardForm.getBoardId());
-        board.updateBoard(boardForm.getSubject(), boardForm.getContents(), boardForm.getImage());
+        board.updateBoard(boardForm.getBoardName(), boardForm.getSubject(), boardForm.getContents(), boardForm.getImage());
         boardRepository.save(board);
     }
 

@@ -36,28 +36,44 @@ public class BoardController {
 
         boardService.processNewPost(account, boardForm);
 
-        return "redirect:/board-list?boardName=" + boardForm.getBoardName();
+        return "redirect:/board-" + boardForm.getBoardName();
     }
 
-    @GetMapping("/board-list")
-    public String boardList(@RequestParam(value = "boardName") String boardName, Model model){
+    @GetMapping("/board-daily")
+    public String boardDaily(Model model){
 
-        List<Board> boardList = boardService.findAllPostsByBoardName(boardName);
+        List<Board> boardList = boardService.findAllPostsByBoardName("daily");
         model.addAttribute("boardList", boardList);
-        model.addAttribute("boardName", boardName);
 
-        return "board/board-list";
+        return "board/board-daily";
     }
 
-//    @GetMapping("/board-card")
-//    public String boardCard(@RequestParam(value = "boardName") String boardName, Model model){
-//
-//        List<Board> boardCard = boardService.findAllPostsByBoardName(boardName);
-//        model.addAttribute("boardCard", boardCard);
-//        model.addAttribute("boardName", boardName);
-//
-//        return "board/board-card";
-//    }
+    @GetMapping("/board-fashion")
+    public String boardFashion(Model model){
+
+        List<Board> boardList = boardService.findAllPostsByBoardName("fashion");
+        model.addAttribute("boardList", boardList);
+
+        return "board/board-fashion";
+    }
+
+    @GetMapping("/board-sale")
+    public String boardSale(Model model){
+
+        List<Board> boardList = boardService.findAllPostsByBoardName("sale");
+        model.addAttribute("boardList", boardList);
+
+        return "board/board-sale";
+    }
+
+    @GetMapping("/board-free")
+    public String boardFree(Model model){
+
+        List<Board> boardList = boardService.findAllPostsByBoardName("free");
+        model.addAttribute("boardList", boardList);
+
+        return "board/board-free";
+    }
 
     @GetMapping("/board-view")
     public String boardView(@RequestParam(value = "boardId") Long id, Model model){
@@ -98,7 +114,7 @@ public class BoardController {
 
         boardService.deleteBoard(id);
 
-        return "redirect:/board-list?boardName=" + boardName;
+        return "redirect:/board-" + boardName;
     }
 }
 
