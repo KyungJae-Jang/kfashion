@@ -7,8 +7,8 @@
         <div class="py-5 text-center">
             <h2>게시글 수정</h2>
         </div>
-        <form class="needs-validation mx-3" method="post" action="#" th:action="@{/board-update}"
-              th:object="${boardForm}" novalidate>
+        <form class="needs-validation mx-3" method="post" action="#"
+              th:action="@{/board-update}" th:object="${boardForm}" novalidate>
             <div class="row justify-content-center">
                 <div class="col-lg-8 px-0">
                     <input type="text" class="form-control" id="subject" th:field="*{subject}"
@@ -33,9 +33,9 @@
             </div>
             <div class="row justify-content-center mt-2">
                 <div class="col-lg-8 px-0 custom-file">
-                    <input type="file" class="custom-file-input" id="inputGroupFile01"
-                           aria-describedby="inputGroupFileAddon01">
-                    <label class="custom-file-label" for="inputGroupFile01">사진 파일 첨부</label>
+                    <input type="file" class="custom-file-input" id="image-file">
+                    <label class="custom-file-label" for="image-file">사진 파일 첨부</label>
+                    <input id="image" type="hidden" th:field="*{image}" class="form-control" />
                 </div>
             </div>
             <div class="row justify-content-center mt-4">
@@ -66,6 +66,24 @@
                 });
             }, false);
         })();
+    </script>
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    <script>
+        $(".custom-file-input").on("change", function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (){
+                var result = reader.result;
+                document.getElementById('image').setAttribute('value', result);
+            };
+            reader.readAsDataURL(file);
+        });
     </script>
 </body>
 </html>

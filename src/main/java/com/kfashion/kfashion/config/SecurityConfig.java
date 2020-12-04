@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .mvcMatchers("/", "/sign-up", "/checked-email", "/pwd-email-token",
-                        "/find-password", "/board-daily", "/board-fashion").permitAll()
+                        "/find-password").permitAll()
                 .anyRequest().authenticated()
                 .and()
         .formLogin()

@@ -20,7 +20,8 @@ public class Board {
     @Lob
     private String contents;
 
-    private String images;
+    @Lob
+    private String image;
 
     private String nickname;
 
@@ -38,10 +39,10 @@ public class Board {
         this.view = ++view;
     }
 
-    public void updateBoard(String boardName, String subject, String contents, String images){
+    public void updateBoard(String boardName, String subject, String contents, String image){
         this.boardName = boardName;
         this.subject = subject;
         this.contents = contents;
-        this.images = images;
+        this.image = image;
     }
 }
