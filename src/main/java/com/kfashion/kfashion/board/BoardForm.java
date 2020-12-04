@@ -22,7 +22,7 @@ public class BoardForm {
     @NotBlank @Length(min = 1)
     private String contents;
 
-    private String image;
+    private String images;
 
     private String boardName;
 
@@ -30,7 +30,7 @@ public class BoardForm {
         this.boardId = board.getId();
         this.subject = board.getSubject();
         this.contents = board.getContents();
-        this.image = board.getImages();
+        this.images = board.getImages();
         this.boardName = board.getBoardName();
     }
 }

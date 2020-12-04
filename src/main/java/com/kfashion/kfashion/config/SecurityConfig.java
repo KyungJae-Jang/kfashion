@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .mvcMatchers("/", "/sign-up", "/checked-email", "/pwd-email-token",
-                        "/find-password", "/free-boardList").permitAll()
+                        "/find-password", "/board-daily", "/board-fashion").permitAll()
                 .anyRequest().authenticated()
                 .and()
         .formLogin()
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .mvcMatchers("/node_modules/**");
+                .mvcMatchers("/node_modules/**", "/images/**");
     }
 
 

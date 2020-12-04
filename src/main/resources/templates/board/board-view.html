@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head"></head>
+<head th:replace="fragments :: head">
+</head>
 <body class="bg-light">
     <div th:replace="fragments :: navbar"></div>
     <div class="container">
@@ -24,11 +25,16 @@
             <div class="col-lg-2"></div>
         </div>
         <div class="row justify-content-center mt-2">
+            <img th:src="${board.getImages()}" width=100 height=50 alt="sample"/>
+        </div>
+        <!-- contents -->
+        <div class="row justify-content-center mt-2">
             <div class="col-lg-8 px-0 pt-2 border-top">
                 <p th:utext="*{#strings.replace(board.getContents(),
                 T(System).getProperty('line.separator'), '&lt;br /&gt;')}"></p>
             </div>
         </div>
+        <!-- comment -->
         <form class="needs-validation" method="post" action="#" novalidate>
             <div class="row justify-content-center mt-2">
                 <div class="col-lg-7 px-0 pt-2 border-top">

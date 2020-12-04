@@ -9,6 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -26,7 +27,8 @@ public class BoardController {
     }
 
     @PostMapping("/board-write")
-    public String boardWriteForm(@CurrentUser Account account,
+    public String boardWriteForm(@RequestParam(value = "file") MultipartFile mulFile,
+                                 @CurrentUser Account account,
                                   @Valid BoardForm boardForm, Errors errors,
                                   Model model){
         if(errors.hasErrors()){
@@ -34,7 +36,7 @@ public class BoardController {
             return "board/board-write";
         }
 
-        boardService.processNewPost(account, boardForm);
+        boardService.processNewPost(account, boardForm, mulFile);
 
         return "redirect:/board-" + boardForm.getBoardName();
     }
@@ -57,15 +59,6 @@ public class BoardController {
         return "board/board-fashion";
     }
 
-    @GetMapping("/board-sale")
-    public String boardSale(Model model){
-
-        List<Board> boardList = boardService.findAllPostsByBoardName("sale");
-        model.addAttribute("boardList", boardList);
-
-        return "board/board-sale";
-    }
-
     @GetMapping("/board-free")
     public String boardFree(Model model){
 
@@ -73,6 +66,15 @@ public class BoardController {
         model.addAttribute("boardList", boardList);
 
         return "board/board-free";
+    }
+
+    @GetMapping("/board-sale")
+    public String boardSale(Model model){
+
+        List<Board> boardList = boardService.findAllPostsByBoardName("sale");
+        model.addAttribute("boardList", boardList);
+
+        return "board/board-sale";
     }
 
     @GetMapping("/board-view")
@@ -118,8 +120,6 @@ public class BoardController {
     }
 }
 
-// TODO boardWriter footer 겹침 고치기
 // TODO 데일리룩, 연예인패션 board view 만들기
-// TODO 답글, 댓글, 대댓글, 페이징, 검색, 사진파일 업로드
-
-// TODO board list page 고치기
+// TODO 사진파일 업로드, 텍스트 에어리어 변경(위즈윅), Summernote, CKEditor5
+// TODO 답글, 댓글, 대댓글, 페이징, 검색

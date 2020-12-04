@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head">
 </head>
-<body>
-
+<body class="bg-light">
+<div th:replace="fragments :: navbar"></div>
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2>데일리룩</h2>
+        </div>
+        <div class="row mb-3 mx-1">
+            <div class="col-lg-12 px-0 d-flex justify-content-end">
+                <a class="btn btn-primary active"
+                   role="button" aria-pressed="true"
+                   href="#" th:href="@{/board-write}">글쓰기</a>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-md-4">
+            <div class="col mb-4" th:each="board : ${boardList}">
+                <div class="card h-70">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <a href="#" th:href="@{/board-view(boardId=${board.getId()})}">
+                        <h6 class="card-title text-truncate" th:text="${board.getSubject()}">Card title</h6>
+                        </a>
+                    </div>
+                    <div class="card-footer py-1 d-flex align-items-start flex-column">
+                        <div>
+                            <i class="fa fa-user-circle"></i>
+                            <small class="text-muted" th:text="${board.getNickname()}">NickName</small>
+                        </div>
+                        <div>
+                            <i class="fa fa-clock-o"></i>
+                            <small class="text-muted" th:text="${board.getStringPostingTime()}">Time</small>
+                            <i class="fa fa-eye ml-1"></i>
+                            <small class="text-muted" th:text="${board.getView()}">View</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments :: footer"></div>
 </body>
 </html>
