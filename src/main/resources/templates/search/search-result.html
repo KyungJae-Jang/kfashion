@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+<body class="bg-light">
+<div th:replace="fragments :: navbar"></div>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>검색 결과</h2>
+        <p class="lead" th:if="${pageList.getTotalElements() == 0}">
+            <strong th:text="${keyword}" id="keyword" class="context"></strong>에 해당하는 게시글이 없습니다.
+        </p>
+        <p class="lead" th:if="${pageList.getTotalElements() > 0}">
+            <strong th:text="${keyword}" id="keyword" class="context"></strong>에 해당하는 게시글을
+            <span th:text="${pageList.getTotalElements()}"></span>개
+            찾았습니다.
+        </p>
+    </div>
+    <div class="row mb-3 mx-1">
+        <div class="col-lg-12 px-0 pb-2 d-flex justify-content-end border-bottom">
+            <a class="btn btn-primary active"
+               role="button" aria-pressed="true"
+               href="#" th:href="@{/board-write}">글쓰기</a>
+        </div>
+    </div>
+    <div class="row justify-content-center mx-1">
+        <div class="col-lg px-0">
+            <table class="table table-sm">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col" style="width: 60%" class="text-center">제목</th>
+                    <th scope="col" class="text-center">작성자</th>
+                    <th scope="col" class="text-center">작성일</th>
+                    <th scope="col" class="text-center">조회</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="board : ${pageList}">
+                    <th th:text="${board.getId()}"  class="text-center" scope="row">0</th>
+                    <td style="width: 60%" class="text-truncate">
+                            <span th:if="${board.getIntent() > 0}">
+                                <small th:each="num : ${#numbers.sequence(1, board.getIntent())}">&nbsp;&nbsp;</small>
+                                <small> &boxur; Re:</small>
+                            </span>
+                        <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}">Hi</a>
+                    </td>
+                    <td th:text="${board.getNickname()}"  class="text-center">KyungJae</td>
+                    <td th:text="${board.getStringPostingTime()}" style="width: 15%" class="text-center">2020-11-11</td>
+                    <td th:text="${board.getView()}"  class="text-center">100</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${!pageList.hasPrevious()}? disabled">
+                    <a class="page-link" href="#" th:href="@{'/search/board' + '?keyword' + ${keyword} +'page=' + ${pageList.getNumber() - 1}}">Previous</a>
+                </li>
+
+                <li class="page-item" th:classappend="${i == pageList.getNumber()}? active"
+                    th:each="i: ${#numbers.sequence(0, pageList.getTotalPages() - 1)}">
+                    <a class="page-link" th:href="@{'/search/board' + '?keyword' + ${keyword} +'page=' + ${i}}"
+                       href="#" th:text="${i + 1}">1</a>
+                </li>
+
+                <li class="page-item" th:classappend="${!pageList.hasNext()}? disabled">
+                    <a class="page-link" href="#" th:href="@{'/search/board' + '?keyword' + ${keyword} +'page=' + ${pageList.getNumber() + 1}}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

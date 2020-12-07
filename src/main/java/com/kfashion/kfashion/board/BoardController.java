@@ -3,6 +3,10 @@ package com.kfashion.kfashion.board;
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -11,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,46 +54,56 @@ public class BoardController {
     }
 
     @GetMapping("/board-daily")
-    public String boardDaily(Model model){
+    public String boardDaily(@PageableDefault(size = 12, page = 0, direction = Sort.Direction.ASC)
+                                         Pageable pageable, Model model){
 
-        List<Board> boardList = boardService.findAllByBoardName("daily");
-        model.addAttribute("boardList", boardList);
+        Page<Board> pageList = boardService.findAllByBoardName("daily", pageable);
+        model.addAttribute("boardName", "daily");
+        model.addAttribute("pageList", pageList);
 
         return "board/board-daily";
     }
 
     @GetMapping("/board-fashion")
-    public String boardFashion(Model model){
+    public String boardFashion(@PageableDefault(size = 12, page = 0, direction = Sort.Direction.ASC)
+                                           Pageable pageable, Model model){
 
-        List<Board> boardList = boardService.findAllByBoardName("fashion");
-        model.addAttribute("boardList", boardList);
+        Page<Board> pageList = boardService.findAllByBoardName("fashion", pageable);
+        model.addAttribute("boardName", "fashion");
+        model.addAttribute("pageList", pageList);
 
         return "board/board-fashion";
     }
 
     @GetMapping("/board-free")
-    public String boardFree(Model model){
+    public String boardFree(@PageableDefault(size = 12, page = 0, sort = {"groupId", "groupOrder"},
+                             direction = Sort.Direction.ASC) Pageable pageable, Model model){
 
-        List<Board> boardList = boardService.findAllByBoardName("free");
-        model.addAttribute("boardList", boardList);
+        Page<Board> pageList = boardService.findAllByBoardName("free", pageable);
+        model.addAttribute("boardName", "free");
+        model.addAttribute("pageList", pageList);
 
         return "board/board-free";
     }
 
     @GetMapping("/board-sale")
-    public String boardSale(Model model){
+    public String boardSale(@PageableDefault(size = 12, page = 0, sort = {"groupId", "groupOrder"},
+                            direction = Sort.Direction.ASC) Pageable pageable, Model model){
 
-        List<Board> boardList = boardService.findAllByBoardName("sale");
-        model.addAttribute("boardList", boardList);
+        Page<Board> pageList = boardService.findAllByBoardName("sale", pageable);
+        model.addAttribute("boardName", "sale");
+        model.addAttribute("pageList", pageList);
 
         return "board/board-sale";
     }
 
     @GetMapping("/board-view")
-    public String boardView(@RequestParam(value = "boardId") Long id, Model model){
+    public String boardView(@RequestParam(value = "boardId") Long id,
+                            @CurrentUser Account account,  Model model){
 
         Board board = boardService.getBoardById(id);
         model.addAttribute("board", board);
+        model.addAttribute("account", account);
 
         return "board/board-view";
     }
@@ -129,10 +142,13 @@ public class BoardController {
     }
 
     @GetMapping("/board-by-account")
-    public String boardByAccount(@CurrentUser Account account,  Model model){
+    public String boardByAccount(@CurrentUser Account account,
+                                 @PageableDefault(size = 12, page = 0, sort = {"groupId", "groupOrder"},
+                                         direction = Sort.Direction.ASC)
+                                         Pageable pageable, Model model){
 
-        List<Board> boardList = account.getBoardList();
-        model.addAttribute("boardList", boardList);
+        Page<Board> pageList = boardService.findBoardByAccount(account, pageable);
+        model.addAttribute("pageList", pageList);
 
         return "board/board-by-account";
     }
@@ -140,4 +156,6 @@ public class BoardController {
 
 
 
-// TODO 댓글, 대댓글, 페이징, 검색,
+// TODO 댓글, 대댓글
+// TODO 본인 계정의 글만 수정, 삭제
+// TODO delete 쿼리가 수행되지 않는 문제 해결

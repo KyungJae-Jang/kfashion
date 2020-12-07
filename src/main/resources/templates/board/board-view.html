@@ -27,7 +27,7 @@
         </div>
         <div class="row justify-content-center my-2">
             <div class="col-lg-8 pt-2">
-                <img th:if="${board.getImage().isEmpty()}"
+                <img th:if="${!board.getImage().isEmpty()}"
                      class="img-fluid mx-auto d-block"
                      th:src="${board.getImage()}"/>
             </div>
@@ -71,9 +71,9 @@
             <div class="col-auto px-0">
                 <a class="btn btn-primary active"
                    role="button" aria-pressed="true"
-                   href="#" th:href="@{/board-update(boardId=${board.getId()})}" sec:authorize="isAuthenticated()">수정</a>
+                   href="#" th:href="@{/board-update(boardId=${board.getId()})}" th:if="${board.getOwner().equals(account)}? hidden">수정</a>
                 <a class="btn btn-danger active"
-                   role="button" aria-pressed="true" sec:authorize="isAuthenticated()"
+                   role="button" aria-pressed="true" th:if="${board.getOwner().equals(account)}? hidden"
                    data-toggle="modal" data-target="#myModal">삭제</a>
             </div>
             <div class="col-lg-2"></div>

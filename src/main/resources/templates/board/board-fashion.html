@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="row row-cols-1 row-cols-md-4">
-            <div class="col mb-4" th:each="board : ${boardList}">
+            <div class="col mb-4" th:each="board : ${pageList}">
                 <a href="#" th:href="@{/board-view(boardId=${board.getId()})}">
                 <div class="card h-70">
                     <img th:src="${board.getImage()}" th:if="${!board.getImage().isEmpty()}" class="card-img-top img-thumbnail">
@@ -39,6 +39,25 @@
                 </div>
                 </a>
             </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${!pageList.hasPrevious()}? disabled">
+                        <a class="page-link" href="#" th:href="@{'/board-' + ${boardName} + '?page=' + ${pageList.getNumber() - 1}}">Previous</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${i == pageList.getNumber()}? active"
+                        th:each="i: ${#numbers.sequence(0, pageList.getTotalPages() - 1)}">
+                        <a class="page-link" th:href="@{'/board-' + ${boardName} + '?page=' + ${i}}"
+                           href="#" th:text="${i + 1}">1</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${!pageList.hasNext()}? disabled">
+                        <a class="page-link" href="#" th:href="@{'/board-' + ${boardName} + '?page=' + ${pageList.getNumber() + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
     <div th:replace="fragments :: footer"></div>
