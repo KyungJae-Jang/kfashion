@@ -14,35 +14,52 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public void processNewPost(Account account, BoardForm boardForm) {
+    public void processNewBoard(Account account, BoardForm boardForm) {
 
-        Board board = Board.builder()
-                .nickname(account.getNickName())
-                .boardName(boardForm.getBoardName())
-                .subject(boardForm.getSubject())
-                .contents(boardForm.getContents())
-                .image(boardForm.getImage())
-                .postingTime(LocalDateTime.now())
-                .view(0)
-                .build();
+        Board board;
 
+        if(boardForm.getGroupId() == null){
+            board = Board.builder()
+                    .groupId(1L)
+                    .groupOrder(1L)
+                    .intent(0L)
+                    .boardName(boardForm.getBoardName())
+                    .nickname(account.getNickName())
+                    .subject(boardForm.getSubject())
+                    .contents(boardForm.getContents())
+                    .image(boardForm.getImage())
+                    .postingTime(LocalDateTime.now())
+                    .view(0L)
+                    .build();
+        } else {
+            board = Board.builder()
+                    .groupId(boardForm.getGroupId())
+                    .groupOrder(boardForm.getGroupOrder() + 1)
+                    .intent(boardForm.getIntent() + 1)
+                    .boardName(boardForm.getBoardName())
+                    .nickname(account.getNickName())
+                    .subject(boardForm.getSubject())
+                    .contents(boardForm.getContents())
+                    .image(boardForm.getImage())
+                    .postingTime(LocalDateTime.now())
+                    .view(0L)
+                    .build();
+        }
+
+        account.addBoard(board);
         boardRepository.save(board);
     }
 
     @Transactional(readOnly = true)
-    public List<Board> findAllPostsByBoardName(String boardName) {
-        return boardRepository.findAllPostByBoardName(boardName);
+    public List<Board> findAllByBoardName(String boardName) {
+        return boardRepository.findAllByBoardName(boardName);
     }
 
     @Transactional(readOnly = true)
     public Board getBoardById(Long id) {
         Optional<Board> board = boardRepository.findById(id);
+        board.get().countView();
         return board.orElse(null);
-    }
-
-    public void setBoardCountView(Board board) {
-        board.countView();
-        boardRepository.save(board);
     }
 
     public void updateBoard(BoardForm boardForm) {
@@ -59,7 +76,8 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public void deleteBoard(Long id) {
+    public void deleteBoard(Account account, Long id) {
+        account.removeBoard(boardRepository.findById(id));
         boardRepository.deleteById(id);
     }
 }

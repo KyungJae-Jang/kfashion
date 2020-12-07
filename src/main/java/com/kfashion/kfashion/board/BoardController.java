@@ -25,16 +25,27 @@ public class BoardController {
         return "board/board-write";
     }
 
+    @GetMapping("/board-rewrite")
+    public String boardReWrite(@RequestParam(value = "boardName") String boardName,
+                               @RequestParam(value = "boardGroupId") Long boardGroupId,
+                               @RequestParam(value = "boardGroupOrder") Long boardGroupOrder,
+                               @RequestParam(value = "boardIntent") Long boardIntent , Model model){
+        model.addAttribute("boardForm",
+                new BoardForm(boardName, boardGroupId, boardGroupOrder, boardIntent));
+        model.addAttribute("rewrite", true);
+
+        return "board/board-write";
+    }
+
     @PostMapping("/board-write")
     public String boardWriteForm(@CurrentUser Account account,
-                                  @Valid BoardForm boardForm, Errors errors,
+                                 @Valid BoardForm boardForm, Errors errors,
                                   Model model){
         if(errors.hasErrors()){
             model.addAttribute("boardForm", boardForm);
             return "board/board-write";
         }
-
-        boardService.processNewPost(account, boardForm);
+        boardService.processNewBoard(account, boardForm);
 
         return "redirect:/board-" + boardForm.getBoardName();
     }
@@ -42,7 +53,7 @@ public class BoardController {
     @GetMapping("/board-daily")
     public String boardDaily(Model model){
 
-        List<Board> boardList = boardService.findAllPostsByBoardName("daily");
+        List<Board> boardList = boardService.findAllByBoardName("daily");
         model.addAttribute("boardList", boardList);
 
         return "board/board-daily";
@@ -51,7 +62,7 @@ public class BoardController {
     @GetMapping("/board-fashion")
     public String boardFashion(Model model){
 
-        List<Board> boardList = boardService.findAllPostsByBoardName("fashion");
+        List<Board> boardList = boardService.findAllByBoardName("fashion");
         model.addAttribute("boardList", boardList);
 
         return "board/board-fashion";
@@ -60,7 +71,7 @@ public class BoardController {
     @GetMapping("/board-free")
     public String boardFree(Model model){
 
-        List<Board> boardList = boardService.findAllPostsByBoardName("free");
+        List<Board> boardList = boardService.findAllByBoardName("free");
         model.addAttribute("boardList", boardList);
 
         return "board/board-free";
@@ -69,7 +80,7 @@ public class BoardController {
     @GetMapping("/board-sale")
     public String boardSale(Model model){
 
-        List<Board> boardList = boardService.findAllPostsByBoardName("sale");
+        List<Board> boardList = boardService.findAllByBoardName("sale");
         model.addAttribute("boardList", boardList);
 
         return "board/board-sale";
@@ -79,7 +90,6 @@ public class BoardController {
     public String boardView(@RequestParam(value = "boardId") Long id, Model model){
 
         Board board = boardService.getBoardById(id);
-        boardService.setBoardCountView(board);
         model.addAttribute("board", board);
 
         return "board/board-view";
@@ -110,14 +120,24 @@ public class BoardController {
 
     @GetMapping("/board-delete")
     public String boardDelete(@RequestParam(value = "boardId") Long id,
-                              @RequestParam(value = "boardName") String boardName){
+                              @RequestParam(value = "boardName") String boardName,
+                              @CurrentUser Account account){
 
-        boardService.deleteBoard(id);
+        boardService.deleteBoard(account, id);
 
         return "redirect:/board-" + boardName;
+    }
+
+    @GetMapping("/board-by-account")
+    public String boardByAccount(@CurrentUser Account account,  Model model){
+
+        List<Board> boardList = account.getBoardList();
+        model.addAttribute("boardList", boardList);
+
+        return "board/board-by-account";
     }
 }
 
 
 
-// TODO 답글, 댓글, 대댓글, 페이징, 검색, Account entity 와 Board entity 관계 설정
+// TODO 댓글, 대댓글, 페이징, 검색,

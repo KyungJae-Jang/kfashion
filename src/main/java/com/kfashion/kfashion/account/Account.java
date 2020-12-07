@@ -1,14 +1,12 @@
 package com.kfashion.kfashion.account;
 
+import com.kfashion.kfashion.board.Board;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter @Setter
@@ -39,6 +37,9 @@ public class Account {
 
     private boolean commentPostedByWeb;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Board> boardList;
+
     public void generateCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
     }
@@ -55,5 +56,18 @@ public class Account {
         this.nickName = nickName;
         this.commentPostedByEmail = commentPostedByEmail;
         this.commentPostedByWeb = commentPostedByWeb;
+    }
+
+    public void addBoard(Board board){
+        if(boardList == null){
+            boardList = new ArrayList<>();
+        }
+        this.getBoardList().add(board);
+        board.setOwner(this);
+    }
+
+    public void removeBoard(Optional<Board> board){
+        this.getBoardList().remove(board);
+        board.get().setOwner(null);
     }
 }

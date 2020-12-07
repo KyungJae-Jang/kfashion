@@ -2,6 +2,7 @@ package com.kfashion.kfashion;
 
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.CurrentUser;
+import com.kfashion.kfashion.board.Board;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -11,10 +11,13 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardForm {
-
-    private Board board;
-
     private Long boardId;
+
+    private Long groupId;
+
+    private Long groupOrder;
+
+    private Long intent;
 
     @NotBlank @Length(min = 1)
     private String subject;
@@ -32,5 +35,12 @@ public class BoardForm {
         this.contents = board.getContents();
         this.image = board.getImage();
         this.boardName = board.getBoardName();
+    }
+
+    public BoardForm(String boardName, Long groupId, Long groupOrder, Long intent){
+        this.boardName = boardName;
+        this.groupId = groupId;
+        this.groupOrder = groupOrder;
+        this.intent = intent;
     }
 }

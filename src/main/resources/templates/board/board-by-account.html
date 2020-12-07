@@ -5,7 +5,7 @@
     <div th:replace="fragments :: navbar"></div>
     <div class="container">
         <div class="py-5 text-center">
-            <h2>세일 정보</h2>
+            <h2>작성글</h2>
         </div>
         <div class="row mb-3 mx-1">
             <div class="col-lg-12 px-0 pb-2 d-flex justify-content-end border-bottom">
@@ -29,7 +29,7 @@
                     <tbody>
                     <tr th:each="board : ${boardList}">
                         <th th:text="${board.getId()}" class="text-center" scope="row">0</th>
-                        <td style="width: 60%" class=" text-truncate">
+                        <td style="width: 60%" class="text-truncate">
                             <span th:if="${board.getIntent() > 0}">
                                 <small th:each="num : ${#numbers.sequence(1, board.getIntent())}">&nbsp;&nbsp;</small>
                                 <small> &boxur; Re:</small>
@@ -37,7 +37,7 @@
                             <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}">Hi</a>
                         </td>
                         <td th:text="${board.getNickname()}" class="text-center">KyungJae</td>
-                        <td th:text="${board.getStringPostingTime()}" class="text-center">2020-11-11</td>
+                        <td th:text="${board.getStringPostingTime()}" style="width: 15%" class="text-center">2020-11-11</td>
                         <td th:text="${board.getView()}" class="text-center">100</td>
                     </tr>
                     </tbody>

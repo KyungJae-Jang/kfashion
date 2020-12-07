@@ -15,8 +15,6 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class ChangeInfoForm {
 
-    private Account account;
-
     @NotBlank
     @Length(min = 3, max = 28)
     @Pattern(regexp = "^[a-zA-z0-9ㄱ-ㅎ가-힇_-]{3,28}$")
@@ -29,8 +27,7 @@ public class ChangeInfoForm {
     private boolean commentPostedByWeb;
 
     public ChangeInfoForm(Account account){
-        this.newNickName = account.getNickName();
-        this.oldNickName = account.getNickName();
+        this.newNickName = this.oldNickName = account.getNickName();
         this.commentPostedByEmail = account.isCommentPostedByEmail();
         this.commentPostedByWeb = account.isCommentPostedByWeb();
     }

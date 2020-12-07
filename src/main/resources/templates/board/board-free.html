@@ -29,7 +29,11 @@
                     <tbody>
                     <tr th:each="board : ${boardList}">
                         <th th:text="${board.getId()}"  class="text-center" scope="row">0</th>
-                        <td style="width: 60%" class="text-center text-truncate">
+                        <td style="width: 60%" class="text-truncate">
+                            <span th:if="${board.getIntent() > 0}">
+                                <small th:each="num : ${#numbers.sequence(1, board.getIntent())}">&nbsp;&nbsp;</small>
+                                <small> &boxur; Re:</small>
+                            </span>
                             <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}">Hi</a>
                         </td>
                         <td th:text="${board.getNickname()}"  class="text-center">KyungJae</td>

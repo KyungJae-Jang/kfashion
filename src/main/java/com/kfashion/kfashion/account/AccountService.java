@@ -16,7 +16,6 @@ import org.thymeleaf.context.Context;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor

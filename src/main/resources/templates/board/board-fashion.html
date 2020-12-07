@@ -19,7 +19,8 @@
             <div class="col mb-4" th:each="board : ${boardList}">
                 <a href="#" th:href="@{/board-view(boardId=${board.getId()})}">
                 <div class="card h-70">
-                    <img src="https://via.placeholder.com/150" th:src="${board.getImage()}" class="card-img-top img-thumbnail" alt="...">
+                    <img th:src="${board.getImage()}" th:if="${!board.getImage().isEmpty()}" class="card-img-top img-thumbnail">
+                    <img src="https://via.placeholder.com/300.png/09f/fff" th:if="${board.getImage().isEmpty()}" class="card-img-top img-thumbnail">
                     <div class="card-body">
                             <h6 class="card-title text-truncate" th:text="${board.getSubject()}">Card title</h6>
                     </div>

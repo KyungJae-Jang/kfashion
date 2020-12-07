@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head">
 </head>
 <body class="bg-light">
-<div th:replace="fragments :: navbar"></div>
+    <div th:replace="fragments :: navbar"></div>
     <div class="container">
         <div class="py-5 text-center">
             <h2>데일리룩</h2>
@@ -18,24 +18,25 @@
         <div class="row row-cols-1 row-cols-md-4">
             <div class="col mb-4" th:each="board : ${boardList}">
                 <a href="#" th:href="@{/board-view(boardId=${board.getId()})}">
-                <div class="card h-70">
-                    <img src="https://via.placeholder.com/150" th:src="${board.getImage()}" class="card-img-top img-thumbnail" alt="...">
-                    <div class="card-body">
-                        <h6 class="card-title text-truncate" th:text="${board.getSubject()}">Card title</h6>
-                    </div>
-                    <div class="card-footer py-1 d-flex align-items-start flex-column">
-                        <div>
-                            <i class="fa fa-user-circle"></i>
-                            <small class="text-muted" th:text="${board.getNickname()}">NickName</small>
+                    <div class="card h-70">
+                        <img th:src="${board.getImage()}" th:if="${!board.getImage().isEmpty()}" class="card-img-top img-thumbnail">
+                        <img src="https://via.placeholder.com/300.png/09f/fff" th:if="${board.getImage().isEmpty()}" class="card-img-top img-thumbnail">
+                        <div class="card-body">
+                            <h6 class="card-title text-truncate" th:text="${board.getSubject()}">Card title</h6>
                         </div>
-                        <div>
-                            <i class="fa fa-clock-o"></i>
-                            <small class="text-muted" th:text="${board.getStringPostingTime()}">Time</small>
-                            <i class="fa fa-eye ml-1"></i>
-                            <small class="text-muted" th:text="${board.getView()}">View</small>
+                        <div class="card-footer py-1 d-flex align-items-start flex-column">
+                            <div>
+                                <i class="fa fa-user-circle"></i>
+                                <small class="text-muted" th:text="${board.getNickname()}">NickName</small>
+                            </div>
+                            <div>
+                                <i class="fa fa-clock-o"></i>
+                                <small class="text-muted" th:text="${board.getStringPostingTime()}">Time</small>
+                                <i class="fa fa-eye ml-1"></i>
+                                <small class="text-muted" th:text="${board.getView()}">View</small>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </a>
             </div>
         </div>

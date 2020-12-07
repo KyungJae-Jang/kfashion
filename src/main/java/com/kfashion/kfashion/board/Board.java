@@ -1,5 +1,6 @@
 package com.kfashion.kfashion.board;
 
+import com.kfashion.kfashion.account.Account;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,8 +13,14 @@ import java.time.format.DateTimeFormatter;
 @Builder @EqualsAndHashCode(of = "id")
 public class Board {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
+
+    private Long groupId;
+
+    private Long groupOrder;
+
+    private Long intent;
 
     private String subject;
 
@@ -29,7 +36,10 @@ public class Board {
 
     private LocalDateTime postingTime;
 
-    private Integer view;
+    private Long view;
+
+    @ManyToOne
+    private Account owner;
 
     public String getStringPostingTime(){
         return postingTime.format(DateTimeFormatter.ofPattern("MM-dd HH:mm"));
