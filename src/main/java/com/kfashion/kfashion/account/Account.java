@@ -37,7 +37,7 @@ public class Account {
 
     private boolean commentPostedByWeb;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Board> boardList;
 
     public void generateCheckToken() {
