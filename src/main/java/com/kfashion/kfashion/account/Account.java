@@ -38,7 +38,7 @@ public class Account {
     private boolean commentPostedByWeb;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<Board> boardList;
+    private List<Board> boardList = new ArrayList<>();
 
     public void generateCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
@@ -59,9 +59,6 @@ public class Account {
     }
 
     public void addBoard(Board board){
-        if(boardList == null){
-            boardList = new ArrayList<>();
-        }
         this.getBoardList().add(board);
         board.setOwner(this);
     }

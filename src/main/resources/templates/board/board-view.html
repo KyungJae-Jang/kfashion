@@ -71,9 +71,9 @@
             <div class="col-auto px-0">
                 <a class="btn btn-primary active"
                    role="button" aria-pressed="true"
-                   href="#" th:href="@{/board-update(boardId=${board.getId()})}" th:if="${board.getOwner().equals(account)}? hidden">수정</a>
+                   href="#" th:href="@{/board-update(boardId=${board.getId()})}" th:if="${board.getOwner().getId().equals(account.getId())}? hidden">수정</a>
                 <a class="btn btn-danger active"
-                   role="button" aria-pressed="true" th:if="${board.getOwner().equals(account)}? hidden"
+                   role="button" aria-pressed="true" th:if="${board.getOwner().getId().equals(account.getId())}? hidden"
                    data-toggle="modal" data-target="#myModal">삭제</a>
             </div>
             <div class="col-lg-2"></div>
@@ -91,11 +91,16 @@
                 </div>
                 <div class="modal-body">
                     게시물을 정말 삭제하시겠습니까?
+                    <form id="frm" method="post" action="#" th:action="@{/board-delete}">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="boardId" th:value="${board.getId()}">
+                            <input type="hidden" class="form-control" name="boardName" th:value="${board.getBoardName()}">
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary active" type="button"  href="#" th:href="@{/board-delete(boardId=${board.getId()},
-                    boardName=${board.getBoardName()})}">확인</a>
-                    <a type="button" class="btn btn-secondary" data-dismiss="modal">취소</a>
+                    <button type="submit" class="btn btn-primary" onclick="submit()">확인</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                 </div>
             </div>
         </div>
@@ -120,6 +125,11 @@
                 });
             }, false);
         })();
+    </script>
+    <script type="text/javascript">
+        function submit(){
+            document.getElementById("frm").submit();
+        }
     </script>
 </body>
 </html>

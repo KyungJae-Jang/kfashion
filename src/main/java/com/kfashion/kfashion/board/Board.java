@@ -38,7 +38,7 @@ public class Board {
 
     private Long view;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account owner;
 
     public String getStringPostingTime(){
@@ -54,5 +54,9 @@ public class Board {
         this.subject = subject;
         this.contents = contents;
         this.image = image;
+    }
+
+    public void moveGroupOrder(){
+        this.groupOrder += 1;
     }
 }

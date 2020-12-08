@@ -7,11 +7,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
@@ -76,8 +79,11 @@ public class BoardController {
     }
 
     @GetMapping("/board-free")
-    public String boardFree(@PageableDefault(size = 12, page = 0, sort = {"groupId", "groupOrder"},
-                             direction = Sort.Direction.ASC) Pageable pageable, Model model){
+    public String boardFree(@PageableDefault(size = 12)
+                                @SortDefault.SortDefaults({
+                                        @SortDefault(sort = "groupId", direction = Sort.Direction.DESC),
+                                        @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
+                                        Pageable pageable, Model model){
 
         Page<Board> pageList = boardService.findAllByBoardName("free", pageable);
         model.addAttribute("boardName", "free");
@@ -87,8 +93,11 @@ public class BoardController {
     }
 
     @GetMapping("/board-sale")
-    public String boardSale(@PageableDefault(size = 12, page = 0, sort = {"groupId", "groupOrder"},
-                            direction = Sort.Direction.ASC) Pageable pageable, Model model){
+    public String boardSale(@PageableDefault(size = 12)
+                                @SortDefault.SortDefaults({
+                                        @SortDefault(sort = "groupId", direction = Sort.Direction.DESC),
+                                        @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
+                                        Pageable pageable, Model model){
 
         Page<Board> pageList = boardService.findAllByBoardName("sale", pageable);
         model.addAttribute("boardName", "sale");
@@ -131,20 +140,23 @@ public class BoardController {
         return "redirect:/board-view?boardId=" + boardForm.getBoardId();
     }
 
-    @GetMapping("/board-delete")
-    public String boardDelete(@RequestParam(value = "boardId") Long id,
-                              @RequestParam(value = "boardName") String boardName,
-                              @CurrentUser Account account){
+    @PostMapping("/board-delete")
+    public String boardDelete(@CurrentUser Account account, BoardDeleteForm boardDeleteForm){
+        System.out.println("===========================================");
+        System.out.println("boardDeleteForm = " + boardDeleteForm.toString());
+        System.out.println("===========================================");
 
-        boardService.deleteBoard(account, id);
+        boardService.deleteBoard(account, boardDeleteForm.getBoardId());
 
-        return "redirect:/board-" + boardName;
+        return "redirect:/board-" + boardDeleteForm.getBoardName();
     }
 
     @GetMapping("/board-by-account")
     public String boardByAccount(@CurrentUser Account account,
-                                 @PageableDefault(size = 12, page = 0, sort = {"groupId", "groupOrder"},
-                                         direction = Sort.Direction.ASC)
+                                 @PageableDefault(size = 12)
+                                 @SortDefault.SortDefaults({
+                                         @SortDefault(sort = "groupId", direction = Sort.Direction.DESC),
+                                         @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
                                          Pageable pageable, Model model){
 
         Page<Board> pageList = boardService.findBoardByAccount(account, pageable);
@@ -157,5 +169,4 @@ public class BoardController {
 
 
 // TODO 댓글, 대댓글
-// TODO 본인 계정의 글만 수정, 삭제
-// TODO delete 쿼리가 수행되지 않는 문제 해결
+// TODO 알림
