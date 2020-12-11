@@ -50,18 +50,10 @@
         <div class="row justify-content-center mt-4">
             <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-sm">
-                    <li class="page-item" th:classappend="${!pageList.hasPrevious()}? disabled">
-                        <a class="page-link" href="#" th:href="@{'/board-by-account?page=' + ${pageList.getNumber() - 1}}">Previous</a>
-                    </li>
-
                     <li class="page-item" th:classappend="${i == pageList.getNumber()}? active"
                         th:each="i: ${#numbers.sequence(0, pageList.getTotalPages() - 1)}">
                         <a class="page-link" th:href="@{'/board-by-account?page=' + ${i}}"
                            href="#" th:text="${i + 1}">1</a>
-                    </li>
-
-                    <li class="page-item" th:classappend="${!pageList.hasNext()}? disabled">
-                        <a class="page-link" href="#" th:href="@{'/board-by-account?page=' + ${pageList.getNumber() + 1}}">Next</a>
                     </li>
                 </ul>
             </nav>

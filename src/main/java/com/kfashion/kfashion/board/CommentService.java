@@ -11,9 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -38,15 +36,42 @@ public class CommentService {
                     .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd. HH:mm")))
                     .build();
         } else {
-            comment = Comment.builder()
-                    .comment(commentForm.getComment())
-                    .nickName(account.getNickName())
-                    .parentNickName(commentRepository.findById(commentForm.getCommentId()).get().getNickName())
-                    .groupId(commentForm.getGroupId())
-                    .groupOrder(commentRepository.maxGroupOrder(commentForm.getGroupId()) + 1)
-                    .intent(1L)
-                    .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
-                    .build();
+
+            Long interruptPosition = commentRepository.interruptPosition(commentForm.getGroupId(),
+                    commentForm.getGroupOrder(), commentForm.getIntent());
+
+            if(interruptPosition == null){
+                comment = Comment.builder()
+                        .comment(commentForm.getComment())
+                        .nickName(account.getNickName())
+                        .parentNickName(commentRepository.findById(commentForm.getCommentId()).get().getNickName())
+                        .groupId(commentForm.getGroupId())
+                        .groupOrder(commentRepository.maxGroupOrder(commentForm.getGroupId()) + 1)
+                        .intent(commentForm.getIntent() + 1)
+                        .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
+                        .build();
+            }   else {
+
+                List<Comment> commentList = commentRepository.findByGroupId(commentForm.getGroupId());
+
+                for(Comment comments : commentList){
+                    if(comments.getGroupOrder() >= interruptPosition){
+                        comments.moveGroupOrder();
+                    }
+                }
+                commentRepository.saveAll(commentList);
+
+                comment = Comment.builder()
+                        .comment(commentForm.getComment())
+                        .nickName(account.getNickName())
+                        .parentNickName(commentRepository.findById(commentForm.getCommentId()).get().getNickName())
+                        .groupId(commentForm.getGroupId())
+                        .groupOrder(interruptPosition)
+                        .intent(commentForm.getIntent() + 1)
+                        .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
+                        .build();
+            }
+
         }
 
         Comment savedComment = commentRepository.save(comment);
@@ -64,9 +89,16 @@ public class CommentService {
         comment.setGroupId(comment.getId());
     }
 
-    public List<CommentForm> getAllCommentList(CommentForm commentForm, Pageable pageable) {
-        List<CommentForm> commentFormList = mappingEntityToDto(commentRepository.findAllByBoardOwnerId(commentForm.getBoardId(), pageable));
-        return commentFormList;
+    public Map<String,Object> getAllCommentList(CommentForm commentForm, Pageable pageable) {
+        Page<Comment> allByBoardOwnerId = commentRepository.findAllByBoardOwnerId(commentForm.getBoardId(), pageable);
+        List<CommentForm> commentFormList = mappingEntityToDto(allByBoardOwnerId);
+
+        Map<String,Object> result = new HashMap<>();
+        result.put("commentFormList", commentFormList);
+        result.put("pageNumber", allByBoardOwnerId.getNumber());
+        result.put("pageTotalPages", allByBoardOwnerId.getTotalPages());
+
+        return result;
     }
 
     private List<CommentForm> mappingEntityToDto(Page<Comment> commentList) {

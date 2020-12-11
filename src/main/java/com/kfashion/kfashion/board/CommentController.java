@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,14 +28,14 @@ public class CommentController {
     }
 
     @GetMapping("/comment-list")
-    public @ResponseBody List<CommentForm> CommentList(CommentForm commentForm,
-                                @PageableDefault(size = 1000)
-                                @SortDefault.SortDefaults({
-                                        @SortDefault(sort = "groupId", direction = Sort.Direction.DESC),
-                                        @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
-                                       Pageable pageable){
+    public @ResponseBody Map<String,Object> CommentList(CommentForm commentForm,
+                                                       @PageableDefault(size = 50)
+                                                        @SortDefault.SortDefaults({
+                                                            @SortDefault(sort = "groupId", direction = Sort.Direction.DESC),
+                                                            @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
+                                                           Pageable pageable){
 
-        List<CommentForm> commentFormList = commentService.getAllCommentList(commentForm, pageable);
+        Map<String,Object> commentFormList = commentService.getAllCommentList(commentForm, pageable);
 
         return commentFormList;
     }
