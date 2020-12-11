@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body class="bg-light">
     <div th:replace="fragments :: navbar"></div>
@@ -20,16 +21,14 @@
                 &#183; <span th:text="${board.getNickname()}">작성자</span>
             </div>
             <div class="col-auto px-0">
-                &#183; <span th:text="${board.getStringPostingTime()}">작성시간</span>
+                &#183; <span th:text="${board.getStringHalfTimeFormat()}">작성시간</span>
                 &#183; 조회수 <span th:text="${board.getView()}">조회</span>
             </div>
             <div class="col-lg-2"></div>
         </div>
-        <div class="row justify-content-center my-2">
+        <div class="row justify-content-center my-2" th:if="${!board.getImage().isEmpty()}">
             <div class="col-lg-8 pt-2">
-                <img th:if="${!board.getImage().isEmpty()}"
-                     class="img-fluid mx-auto d-block"
-                     th:src="${board.getImage()}"/>
+                <img class="img-fluid mx-auto d-block" th:src="${board.getImage()}"/>
             </div>
         </div>
         <!-- contents -->
@@ -40,17 +39,29 @@
             </div>
         </div>
         <!-- comment -->
-        <form class="needs-validation" method="post" action="#" novalidate>
-            <div class="row justify-content-center mt-2">
-                <div class="col-lg-7 px-0 pt-2 border-top">
-                    <input type="text" class="form-control" id="text"
-                           aria-describedby="inputGroup-sizing-default">
-                </div>
-                <div class="col-lg-1 px-0 pt-2 border-top">
-                    <button type="submit" class="btn btn-primary btn-block">등록</button>
+        <div class="row justify-content-center mt-1 px-0">
+            <div class="col-lg-8 px-0 py-0">
+                <!-- comment main-->
+                <div class="card border-light px-0 py-0 ">
+                    <div class="card-footer">
+                        <h6 class="card-title" id="card-title">댓글</h6>
+                    </div>
+                    <div class="card-body px-0 py-0">
+                        <ul class="list-group" id="commentList">
+                        </ul>
+                    </div>
+                    <div class="card-footer px-0 py-0">
+                        <div class="input-group mx-0 my-0">
+                            <input type="text" class="form-control" placeholder="댓글 내용을 입력하세요." id="comment" aria-describedby="button-addon2">
+                            <input type="hidden" class="form-control" name="boardId" id="boardId" th:value="${board.getId()}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="commentButton">등록</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
+        </div>
         <div class="row mt-4">
             <div class="col-lg-2"></div>
             <div class="col-auto mr-auto px-0">
@@ -106,30 +117,257 @@
         </div>
     </div>
     <div th:replace="fragments :: footer"></div>
-    <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
     <script type="text/javascript">
         function submit(){
             document.getElementById("frm").submit();
         }
+    </script>
+    <script type="application/javascript" th:inline="javascript">
+        $(document).ready(function () {
+            showList();
+        })
+
+        $('#commentButton').click(function(){
+
+            if($('#comment').val() == ''){
+                alert("내용을 입력하세요");
+                return;
+            }
+
+            var comment = $('#comment').val();
+            var boardId = /*[[${board.getId()}]]*/ null;
+
+            var params = {
+                comment : comment,
+                boardId : boardId
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/comment-write',
+                data: params,
+                success: function() {
+                    console.log('Write Comment Complete')
+                    showList();
+                    $('#comment').val('');
+                },
+                error: function (xhr, status, error) {
+                    console.log('error:' + error);
+                }
+            });
+        });
+
+        function showList() {
+
+            var boardId = /*[[${board.getId()}]]*/ null;
+
+            $.ajax({
+                type: 'GET',
+                url: '/comment-list',
+                data: {boardId : boardId},
+                success: function(data) {
+                    var list = '';
+
+                    $.each(data, function (index){
+                        list    += "<li class='list-group-item' id='commentCard"+ index + "'>"
+                                + "<div class=";
+                                if(data[index].intent > 0){
+                                    list += "'pl-5'";
+                                }
+
+                        list    += ">"
+                                + "<b>"+ data[index].nickName + "</b>";
+
+                                if(data[index].parentNickName != null){
+                                    list += "</br>" + "<b>"+ "@"+ data[index].parentNickName +"</b>";
+                                }
+                        list    += "<p>" + data[index].comment + "</p>"
+                                + "<small>" +  data[index].commentTime + "</small>"
+                                + "<a role='button' class='btn active px-0 ml-4' onclick='updateButton("+ index +")'";
+
+                                if([[${account.getId()}]] != data[index].accountId){
+                                    list += "hidden";
+                                }
+
+                        list    += ">수정</a>"
+                                + "<a role='button' class='btn active px-0 ml-2' onclick='deleteButton("+ data[index].commentId +")'";
+
+                                if([[${account.getId()}]] != data[index].accountId){
+                                    list += "hidden";
+                                }
+
+                        list    += ">삭제</a>"
+                                + "<a role='button' class='btn active px-0 ml-2' onclick='replyButton("+ index +")'>답글쓰기</a>"
+                                + "<input type='hidden' className='form-control' name='commentId' id='commentId' value='" + data[index].commentId + "'>"
+                                + "<input type='hidden' className='form-control' name='groupId' id='groupId' value='" + data[index].groupId + "'>"
+                                + "<input type='hidden' className='form-control' name='groupOrder' id='groupOrder' value='" + data[index].groupOrder + "'>"
+                                + "<input type='hidden' className='form-control' name='intent' id='intent' value='" + data[index].intent + "'>"
+                                + "</div>"
+                                + "</li>";
+
+                        console.log(data[index].accountId);
+                    });
+
+                    $('#commentList').html(list);
+
+                    console.log(data)
+                },
+                error: function (xhr, status, error) {
+                    console.log('error:' + error);
+                }
+            });
+        }
+
+        function updateButton(index){
+
+            var id = "commentCard" + index;
+            var commentOld =  $('#' + id).find('p').text();
+            var commentId = $('#' + id).find('input').val();
+
+            var input = '';
+
+            input   += "<div class='input-group mx-0 my-0'>"
+                    + "<input type='text' class='form-control' placeholder='댓글 내용을 입력하세요.'"
+                    + "id='commentUpdate' aria-describedby='button-addon4'>"
+                    + "<div class='input-group-append'>"
+                    + "<button class='btn btn-outline-secondary' type='button' onclick='showList()'>취소</button>"
+                    + "<button class='btn btn-outline-secondary' type='button' id='commentUpdateButton'>등록</button>"
+                    + "</div>"
+                    + "</div>";
+
+            $('#'+ id).replaceWith(input);
+            $('#commentUpdate').val(commentOld);
+
+            $('#commentUpdateButton').click(function(){
+
+                if( $('#commentUpdate').val() == ''){
+                    alert("내용을 입력하세요");
+                    return;
+                }
+                if( $('#commentUpdate').val() == commentOld){
+                    showList();
+                    return;
+                }
+
+                var comment = $('#commentUpdate').val();
+
+                var params = {
+                    comment : comment,
+                    commentId : commentId
+                };
+
+                console.log(params);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/comment-update',
+                    data: params,
+                    success: function() {
+                        console.log('Update Comment Complete')
+                        showList();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('error:' + error);
+                    }
+                });
+            });
+        }
+
+        function deleteButton(commentId){
+            var commentId = commentId;
+            var boardId = /*[[${board.getId()}]]*/ null;
+
+            var params = {
+                commentId : commentId,
+                boardId : boardId
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/comment-delete',
+                data: params,
+                success: function() {
+                    console.log('Delete Comment Complete')
+                    showList();
+                },
+                error: function (xhr, status, error) {
+                    console.log('error:' + error);
+                }
+            });
+        }
+
+        function replyButton(index) {
+            var id = "commentCard" + index;
+
+            var commentId = '';
+            var groupId = '';
+            var groupOrder = '';
+
+            $('#' + id).find('input').each(function (index){
+                switch (index) {
+                    case 0 : commentId =  $( this ).val(); break;
+                    case 1 : groupId =  $( this ).val(); break;
+                    case 2 : groupOrder = $( this ).val(); break;
+                }
+            })
+
+            var input = '';
+
+            input   += "<div class='input-group mx-0 my-0'>"
+                + "<input type='text' class='form-control' placeholder='댓글 내용을 입력하세요.'"
+                + "id='commentReply' aria-describedby='button-addon4'>"
+                + "<div class='input-group-append'>"
+                + "<button class='btn btn-outline-secondary' type='button' onclick='showList()'>취소</button>"
+                + "<button class='btn btn-outline-secondary' type='button' id='commentReplyButton'>등록</button>"
+                + "</div>"
+                + "</div>";
+
+            $('#' + id).append(input);
+
+
+            $('#commentReplyButton').click(function () {
+                if( $('#commentReply').val() == ''){
+                    alert("내용을 입력하세요");
+                    return;
+                }
+
+                var comment = $('#commentReply').val();
+                var boardId = /*[[${board.getId()}]]*/ null;
+
+                $('#comment').val('');
+
+                var params = {
+                    comment : comment,
+                    boardId : boardId,
+                    commentId : commentId,
+                    groupId : groupId,
+                    groupOrder : groupOrder,
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/comment-write',
+                    data: params,
+                    success: function() {
+                        console.log('replyButton success');
+                        showList();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('error:' + error);
+                    }
+                });
+            })
+        }
+
+    </script>
+    <script type="application/javascript" th:inline="javascript">
+        $(function() {
+            var csrfToken = /*[[${_csrf.token}]]*/ null;
+            var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            });
+        });
     </script>
 </body>
 </html>

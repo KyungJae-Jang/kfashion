@@ -9,12 +9,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
@@ -142,9 +140,6 @@ public class BoardController {
 
     @PostMapping("/board-delete")
     public String boardDelete(@CurrentUser Account account, BoardDeleteForm boardDeleteForm){
-        System.out.println("===========================================");
-        System.out.println("boardDeleteForm = " + boardDeleteForm.toString());
-        System.out.println("===========================================");
 
         boardService.deleteBoard(account, boardDeleteForm.getBoardId());
 
@@ -164,9 +159,5 @@ public class BoardController {
 
         return "board/board-by-account";
     }
+
 }
-
-
-
-// TODO 댓글, 대댓글
-// TODO 알림

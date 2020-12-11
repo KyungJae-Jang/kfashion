@@ -6,6 +6,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter @Setter
@@ -41,7 +44,14 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     private Account owner;
 
-    public String getStringPostingTime(){
+    @OneToMany(mappedBy = "boardOwner", fetch = FetchType.EAGER)
+    private List<Comment> commentList = new ArrayList<>();
+
+    public String getStringFullTimeFormat(){
+        return postingTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm"));
+    }
+
+    public String getStringHalfTimeFormat(){
         return postingTime.format(DateTimeFormatter.ofPattern("MM-dd HH:mm"));
     }
 
@@ -58,5 +68,15 @@ public class Board {
 
     public void moveGroupOrder(){
         this.groupOrder += 1;
+    }
+
+    public void addComment(Comment comment){
+        this.getCommentList().add(comment);
+        comment.setBoardOwner(this);
+    }
+
+    public void removeComment(Optional<Comment> Comment){
+        this.getCommentList().remove(Comment);
+        Comment.get().setBoardOwner(null);
     }
 }

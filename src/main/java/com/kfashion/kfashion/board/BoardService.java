@@ -81,11 +81,11 @@ public class BoardService {
         accountRepository.save(account).addBoard(savedBoard);
 
         if(board.getGroupId() == null){
-            setGroupId(savedBoard);
+            setBoardGroupId(savedBoard);
         }
     }
 
-    private void setGroupId(Board board) {
+    private void setBoardGroupId(Board board) {
         board.setGroupId(board.getId());
     }
 

@@ -40,7 +40,7 @@
                             <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}">Hi</a>
                         </td>
                         <td th:text="${board.getNickname()}" class="text-center">KyungJae</td>
-                        <td th:text="${board.getStringPostingTime()}" style="width: 15%" class="text-center">2020-11-11</td>
+                        <td th:text="${board.getStringFullTimeFormat()}" style="width: 15%" class="text-center">2020-11-11</td>
                         <td th:text="${board.getView()}" class="text-center">100</td>
                     </tr>
                     </tbody>
@@ -49,7 +49,7 @@
         </div>
         <div class="row justify-content-center mt-4">
             <nav aria-label="Page navigation example">
-                <ul class="pagination">
+                <ul class="pagination pagination-sm">
                     <li class="page-item" th:classappend="${!pageList.hasPrevious()}? disabled">
                         <a class="page-link" href="#" th:href="@{'/board-by-account?page=' + ${pageList.getNumber() - 1}}">Previous</a>
                     </li>

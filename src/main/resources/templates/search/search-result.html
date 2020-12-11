@@ -45,7 +45,7 @@
                         <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}">Hi</a>
                     </td>
                     <td th:text="${board.getNickname()}"  class="text-center">KyungJae</td>
-                    <td th:text="${board.getStringPostingTime()}" style="width: 15%" class="text-center">2020-11-11</td>
+                    <td th:text="${board.getStringFullTimeFormat()}" style="width: 15%" class="text-center">2020-11-11</td>
                     <td th:text="${board.getView()}"  class="text-center">100</td>
                 </tr>
                 </tbody>

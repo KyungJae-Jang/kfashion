@@ -31,7 +31,7 @@
                             </div>
                             <div>
                                 <i class="fa fa-clock-o"></i>
-                                <small class="text-muted" th:text="${board.getStringPostingTime()}">Time</small>
+                                <small class="text-muted" th:text="${board.getStringFullTimeFormat()}">Time</small>
                                 <i class="fa fa-eye ml-1"></i>
                                 <small class="text-muted" th:text="${board.getView()}">View</small>
                             </div>
@@ -42,7 +42,7 @@
         </div>
         <div class="row justify-content-center mt-4">
             <nav aria-label="Page navigation example">
-                <ul class="pagination">
+                <ul class="pagination pagination-sm">
                     <li class="page-item" th:classappend="${!pageList.hasPrevious()}? disabled">
                         <a class="page-link" href="#" th:href="@{'/board-' + ${boardName} + '?page=' + ${pageList.getNumber() - 1}}">Previous</a>
                     </li>
