@@ -4,7 +4,7 @@ import com.kfashion.kfashion.mail.EmailMessage;
 import com.kfashion.kfashion.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +42,7 @@ public class AccountService {
                 .email(signUpForm.getEmail())
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
                 .joinedAt(LocalDateTime.now())
+                .confirmDeadLine(LocalDateTime.now().plusDays(14))
                 .build();
         account.generateCheckToken();
 
@@ -100,5 +101,17 @@ public class AccountService {
                 .message(message)
                 .build();
         emailService.send(emailMessage);
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void scheduleEnforcementRemoveAccountTask(){
+        List<Account> accountList = accountRepository.findByEmailVerified(false);
+        if(accountList != null){
+            for (Account account : accountList){
+                if(LocalDateTime.now().isAfter(account.getConfirmDeadLine())){
+                    accountRepository.delete(account);
+                }
+            }
+        }
     }
 }

@@ -44,7 +44,7 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     private Account owner;
 
-    @OneToMany(mappedBy = "boardOwner", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "boardOwner", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     public String getStringFullTimeFormat(){

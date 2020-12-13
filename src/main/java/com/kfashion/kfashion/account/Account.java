@@ -38,10 +38,10 @@ public class Account {
 
     private boolean commentPostedByWeb;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Board> boardList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accountOwner", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accountOwner", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     public void generateCheckToken() {
