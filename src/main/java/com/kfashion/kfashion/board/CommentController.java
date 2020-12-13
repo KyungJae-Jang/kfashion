@@ -4,11 +4,13 @@ import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.CurrentUser;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -53,6 +55,18 @@ public class CommentController {
 
         commentService.deleteComment(account, commentForm);
     }
-}
 
-// TODO 알림
+    @GetMapping("/comment-by-account")
+    public String commentByAccount(@CurrentUser Account account,
+                                 @PageableDefault(size = 12)
+                                 @SortDefault.SortDefaults({
+                                         @SortDefault(sort = "groupId", direction = Sort.Direction.DESC),
+                                         @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
+                                         Pageable pageable, Model model){
+
+        Page<Comment> pageList = commentService.findCommentByAccount(account, pageable);
+        model.addAttribute("pageList", pageList);
+
+        return "comment/comment-by-account";
+    }
+}

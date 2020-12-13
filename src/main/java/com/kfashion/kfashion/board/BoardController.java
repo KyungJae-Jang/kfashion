@@ -159,5 +159,4 @@ public class BoardController {
 
         return "board/board-by-account";
     }
-
 }

@@ -4,8 +4,6 @@ import com.kfashion.kfashion.account.Account;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter @Setter

@@ -125,4 +125,10 @@ public class CommentService {
         commentRepository.findById(
                 commentForm.getCommentId()).get().setComment(commentForm.getComment());
     }
+
+    @Transactional(readOnly = true)
+    public Page<Comment> findCommentByAccount(Account account, Pageable pageable) {
+        Page<Comment> page = commentRepository.findAllByAccountOwnerId(account.getId(), pageable);
+        return page;
+    }
 }

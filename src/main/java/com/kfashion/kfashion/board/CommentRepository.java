@@ -20,6 +20,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Page<Comment> findAllByBoardOwnerId(Long id, Pageable pageable);
 
+    Page<Comment> findAllByAccountOwnerId(Long id, Pageable pageable);
+
     @Query(value = "SELECT MIN(c.groupOrder) FROM Comment c WHERE c.groupId = ?1 " +
             "and c.groupOrder > ?2 and c.intent <= ?3")
     Long interruptPosition(Long groupId, Long groupOrder, Long intent);
