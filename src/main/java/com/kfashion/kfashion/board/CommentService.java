@@ -1,9 +1,12 @@
 package com.kfashion.kfashion.board;
 
+import com.kfashion.kfashion.Notification.CommentEvent;
+import com.kfashion.kfashion.Notification.CommentEventHandler;
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import java.util.*;
 @Transactional
 public class CommentService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final ModelMapper mapper;
     private final BoardRepository boardRepository;
     private final AccountRepository accountRepository;
@@ -28,60 +32,71 @@ public class CommentService {
         Comment comment;
 
         if (commentForm.getGroupId() == null) {
-            comment = Comment.builder()
-                    .comment(commentForm.getComment())
-                    .nickName(account.getNickName())
-                    .groupOrder(0L)
-                    .intent(0L)
-                    .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd. HH:mm")))
-                    .build();
+            comment = newFirstComment(account, commentForm);
         } else {
-
-            Long interruptPosition = commentRepository.interruptPosition(commentForm.getGroupId(),
-                    commentForm.getGroupOrder(), commentForm.getIntent());
-
-            if(interruptPosition == null){
-                comment = Comment.builder()
-                        .comment(commentForm.getComment())
-                        .nickName(account.getNickName())
-                        .parentNickName(commentRepository.findById(commentForm.getCommentId()).get().getNickName())
-                        .groupId(commentForm.getGroupId())
-                        .groupOrder(commentRepository.maxGroupOrder(commentForm.getGroupId()) + 1)
-                        .intent(commentForm.getIntent() + 1)
-                        .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
-                        .build();
-            }   else {
-
-                List<Comment> commentList = commentRepository.findByGroupId(commentForm.getGroupId());
-
-                for(Comment comments : commentList){
-                    if(comments.getGroupOrder() >= interruptPosition){
-                        comments.moveGroupOrder();
-                    }
-                }
-                commentRepository.saveAll(commentList);
-
-                comment = Comment.builder()
-                        .comment(commentForm.getComment())
-                        .nickName(account.getNickName())
-                        .parentNickName(commentRepository.findById(commentForm.getCommentId()).get().getNickName())
-                        .groupId(commentForm.getGroupId())
-                        .groupOrder(interruptPosition)
-                        .intent(commentForm.getIntent() + 1)
-                        .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
-                        .build();
-            }
-
+            comment = newReplyComment(account, commentForm);
+            eventPublisher.publishEvent(new CommentEvent(comment));
         }
 
         Comment savedComment = commentRepository.save(comment);
-        accountRepository.save(account).addComment(savedComment);
+        accountRepository.findById(account.getId()).get().addComment(savedComment);
         Optional<Board> board = boardRepository.findById(commentForm.getBoardId());
         board.get().addComment(comment);
 
-        if(comment.getGroupId()==null){
+        if(comment.getGroupId() == null){
             setCommentGroupId(savedComment);
         }
+    }
+
+    private Comment newReplyComment(Account account, CommentForm commentForm) {
+        Comment comment;
+        Long interruptPosition = commentRepository.interruptPosition(commentForm.getGroupId(),
+                commentForm.getGroupOrder(), commentForm.getIntent());
+
+        if(interruptPosition == null){
+            comment = Comment.builder()
+                    .comment(commentForm.getComment())
+                    .nickName(account.getNickName())
+                    .parentNickName(commentRepository.findById(commentForm.getCommentId()).get().getNickName())
+                    .groupId(commentForm.getGroupId())
+                    .groupOrder(commentRepository.maxGroupOrder(commentForm.getGroupId()) + 1)
+                    .intent(commentForm.getIntent() + 1)
+                    .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
+                    .build();
+        }   else {
+
+            List<Comment> commentList = commentRepository.findByGroupId(commentForm.getGroupId());
+
+            for(Comment comments : commentList){
+                if(comments.getGroupOrder() >= interruptPosition){
+                    comments.moveGroupOrder();
+                }
+            }
+            commentRepository.saveAll(commentList);
+
+            comment = Comment.builder()
+                    .comment(commentForm.getComment())
+                    .nickName(account.getNickName())
+                    .parentNickName(commentRepository.findById(commentForm.getCommentId()).get().getNickName())
+                    .groupId(commentForm.getGroupId())
+                    .groupOrder(interruptPosition)
+                    .intent(commentForm.getIntent() + 1)
+                    .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
+                    .build();
+        }
+        return comment;
+    }
+
+    private Comment newFirstComment(Account account, CommentForm commentForm) {
+        Comment comment;
+        comment = Comment.builder()
+                .comment(commentForm.getComment())
+                .nickName(account.getNickName())
+                .groupOrder(0L)
+                .intent(0L)
+                .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd. HH:mm")))
+                .build();
+        return comment;
     }
 
 

@@ -37,7 +37,8 @@
                                     </svg>Re:
                                 </small>
                             </span>
-                            <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}">Hi</a>
+                            <a class="text-truncate" href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}">
+                            </a>
                         </td>
                         <td th:text="${board.getNickname()}" class="text-center">KyungJae</td>
                         <td th:text="${board.getStringFullTimeFormat()}" class="text-center">2020-11-11</td>

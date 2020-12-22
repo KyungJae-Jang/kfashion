@@ -13,6 +13,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Page<Board> findBoardByBoardName(String boardName, Pageable pageable);
 
+    List<Board> findTop4ByBoardNameOrderByIdDesc(String boardName);
+
     @Query(
             value = "SELECT b FROM Board b WHERE b.subject LIKE %:keyword%",
             countQuery = "SELECT COUNT(b.id) FROM Board b WHERE b.subject LIKE %:keyword"

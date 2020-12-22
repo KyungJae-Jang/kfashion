@@ -13,6 +13,67 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        <div class="mt-4">
+            <div class="row row-cols-1 row-cols-md-2">
+                <div class="col mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            자유게시판
+                        </div>
+                        <ul class="list-group list-group-flush" th:each="board : ${freeBoardList}">
+                            <li class="list-group-item"><a href="#" th:href="@{/board-view(boardId=${board.getId()})}"
+                                                           th:text="${board.getSubject()}"></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            세일정보
+                        </div>
+                        <ul class="list-group list-group-flush" th:each="board : ${saleBoardList}">
+                            <li class="list-group-item"><a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}"></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            데일리룩
+                        </div>
+                        <div class="row row-cols-1 row-cols-md-2">
+                            <div class="col mb-4" th:each="board : ${dailyBoardList}">
+                                <div class="card">
+                                    <a href="#" th:href="@{/board-view(boardId=${board.getId()})}">
+                                        <img class="img-thumbnail" style="width: 250px; height: 250px;" th:src="${board.getImage()}" th:if="${!board.getImage().isEmpty()}"></a>
+                                    <div class="card-footer">
+                                        <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            연예인 패션
+                        </div>
+                        <div class="row row-cols-1 row-cols-md-2">
+                            <div class="col mb-4" th:each="board : ${fashionBoardList}">
+                                <div class="card">
+                                    <a href="#" th:href="@{/board-view(boardId=${board.getId()})}">
+                                        <img class="img-thumbnail" style="width: 250px; height: 250px;" th:src="${board.getImage()}" th:if="${!board.getImage().isEmpty()}"></a>
+                                    <div class="card-footer">
+                                        <a href="#" th:href="@{/board-view(boardId=${board.getId()})}" th:text="${board.getSubject()}"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div th:replace="fragments :: footer"></div>
 </body>
