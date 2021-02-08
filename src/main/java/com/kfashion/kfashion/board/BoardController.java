@@ -22,6 +22,7 @@ import javax.validation.Valid;
 public class BoardController {
 
     private final BoardService boardService;
+    private final BoardRepository boardRepository;
 
     @GetMapping("/board-write")
     public String boardWrite(Model model){
@@ -30,10 +31,8 @@ public class BoardController {
     }
 
     @GetMapping("/board-rewrite")
-    public String boardReWrite(@RequestParam(value = "boardName") String boardName,
-                               @RequestParam(value = "boardGroupId") Long boardGroupId,
-                               @RequestParam(value = "boardGroupOrder") Long boardGroupOrder,
-                               @RequestParam(value = "boardIntent") Long boardIntent , Model model){
+    public String boardReWrite(String boardName, Long boardGroupId,
+                               Long boardGroupOrder, Long boardIntent, Model model){
         model.addAttribute("boardForm",
                 new BoardForm(boardName, boardGroupId, boardGroupOrder, boardIntent));
         model.addAttribute("rewrite", true);
@@ -58,7 +57,7 @@ public class BoardController {
     public String boardDaily(@PageableDefault(size = 12, page = 0, direction = Sort.Direction.ASC)
                                          Pageable pageable, Model model){
 
-        Page<Board> pageList = boardService.findAllByBoardName("daily", pageable);
+        Page<Board> pageList = boardRepository.findBoardByBoardName("daily", pageable);
         model.addAttribute("boardName", "daily");
         model.addAttribute("pageList", pageList);
 
@@ -69,7 +68,7 @@ public class BoardController {
     public String boardFashion(@PageableDefault(size = 12, page = 0, direction = Sort.Direction.ASC)
                                            Pageable pageable, Model model){
 
-        Page<Board> pageList = boardService.findAllByBoardName("fashion", pageable);
+        Page<Board> pageList = boardRepository.findBoardByBoardName("fashion", pageable);
         model.addAttribute("boardName", "fashion");
         model.addAttribute("pageList", pageList);
 
@@ -83,7 +82,7 @@ public class BoardController {
                                         @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
                                         Pageable pageable, Model model){
 
-        Page<Board> pageList = boardService.findAllByBoardName("free", pageable);
+        Page<Board> pageList = boardRepository.findBoardByBoardName("free", pageable);
         model.addAttribute("boardName", "free");
         model.addAttribute("pageList", pageList);
 
@@ -97,7 +96,7 @@ public class BoardController {
                                         @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
                                         Pageable pageable, Model model){
 
-        Page<Board> pageList = boardService.findAllByBoardName("sale", pageable);
+        Page<Board> pageList = boardRepository.findBoardByBoardName("sale", pageable);
         model.addAttribute("boardName", "sale");
         model.addAttribute("pageList", pageList);
 
@@ -105,10 +104,9 @@ public class BoardController {
     }
 
     @GetMapping("/board-view")
-    public String boardView(@RequestParam(value = "boardId") Long id,
-                            @CurrentUser Account account,  Model model){
+    public String boardView(Long boardId, @CurrentUser Account account, Model model){
 
-        Board board = boardService.getBoardById(id);
+        Board board = boardService.getBoardById(boardId);
         model.addAttribute("board", board);
         model.addAttribute("account", account);
 
@@ -116,9 +114,9 @@ public class BoardController {
     }
 
     @GetMapping("/board-update")
-    public String boardUpdate(@RequestParam(value = "boardId") Long id, Model model){
+    public String boardUpdate(Long boardId, Model model){
 
-        Board board = boardService.getBoardById(id);
+        Board board = boardService.getBoardById(boardId);
         model.addAttribute("boardForm", new BoardForm(board));
 
         return "board/board-update";

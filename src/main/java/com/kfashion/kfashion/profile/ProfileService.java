@@ -16,8 +16,7 @@ public class ProfileService {
     private final PasswordEncoder passwordEncoder;
 
     public void updateInfo(Account account, ChangeInfoForm changeInfoForm) {
-        account.updateInfo(changeInfoForm.getNewNickName(),
-                changeInfoForm.isCommentPostedByEmail(), changeInfoForm.isCommentPostedByWeb());
+        account.updateInfo(changeInfoForm.getNewNickName());
         accountRepository.save(account);
     }
 

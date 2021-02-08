@@ -3,7 +3,6 @@ package com.kfashion.kfashion.profile;
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

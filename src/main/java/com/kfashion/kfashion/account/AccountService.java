@@ -17,8 +17,8 @@ import org.thymeleaf.context.Context;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Service
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class AccountService {
@@ -49,6 +49,20 @@ public class AccountService {
         return account;
     }
 
+    public void login(Account account) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(
+                        new UserAccount(account),
+                        account.getPassword(),
+                        List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    }
+
+    public void completeLogin(Account account) {
+        account.setEmailVerified(true);
+        login(account);
+    }
+
     public void sendCheckEmailToken(Account newAccount) {
         Context context = new Context();
         context.setVariable("nickname", newAccount.getNickName());
@@ -66,20 +80,6 @@ public class AccountService {
                 .message(message)
                 .build();
         emailService.send(emailMessage);
-    }
-
-    public void login(Account account) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        new UserAccount(account),
-                        account.getPassword(),
-                        List.of(new SimpleGrantedAuthority("ROLE_USER")));
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-    }
-
-    public void completeLogin(Account account) {
-        account.setEmailVerified(true);
-        login(account);
     }
 
     public void sendPwdEmailToken(FindPwdForm findPwdForm) {
@@ -103,15 +103,15 @@ public class AccountService {
         emailService.send(emailMessage);
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void scheduleEnforcementRemoveAccountTask(){
         List<Account> accountList = accountRepository.findByEmailVerified(false);
         if(accountList != null){
-            for (Account account : accountList){
+            accountList.forEach(account -> {
                 if(LocalDateTime.now().isAfter(account.getConfirmDeadLine())){
                     accountRepository.delete(account);
                 }
-            }
+            });
         }
     }
 }

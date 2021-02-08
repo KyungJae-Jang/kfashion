@@ -31,15 +31,12 @@ public class CommentController {
 
     @GetMapping("/comment-list")
     public @ResponseBody Map<String,Object> CommentList(CommentForm commentForm,
-                                                       @PageableDefault(size = 50)
                                                         @SortDefault.SortDefaults({
                                                             @SortDefault(sort = "groupId", direction = Sort.Direction.DESC),
                                                             @SortDefault(sort = "groupOrder", direction = Sort.Direction.ASC)})
                                                            Pageable pageable){
 
-        Map<String,Object> commentFormList = commentService.getAllCommentList(commentForm, pageable);
-
-        return commentFormList;
+        return commentService.getAllCommentList(commentForm, pageable);
     }
 
     @PostMapping("/comment-update")
@@ -50,8 +47,6 @@ public class CommentController {
 
     @PostMapping("/comment-delete")
     public @ResponseBody void CommentDelete(@CurrentUser Account account, CommentForm commentForm){
-
-        System.out.println("getCommentId = " + commentForm.getCommentId());
 
         commentService.deleteComment(account, commentForm);
     }

@@ -1,7 +1,5 @@
 package com.kfashion.kfashion.board;
 
-import com.kfashion.kfashion.Notification.CommentEvent;
-import com.kfashion.kfashion.Notification.CommentEventHandler;
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,6 @@ import java.util.*;
 @Transactional
 public class CommentService {
 
-    private final ApplicationEventPublisher eventPublisher;
     private final ModelMapper mapper;
     private final BoardRepository boardRepository;
     private final AccountRepository accountRepository;
@@ -35,7 +32,6 @@ public class CommentService {
             comment = newFirstComment(account, commentForm);
         } else {
             comment = newReplyComment(account, commentForm);
-            eventPublisher.publishEvent(new CommentEvent(comment));
         }
 
         Comment savedComment = commentRepository.save(comment);
@@ -46,6 +42,18 @@ public class CommentService {
         if(comment.getGroupId() == null){
             setCommentGroupId(savedComment);
         }
+    }
+
+    private Comment newFirstComment(Account account, CommentForm commentForm) {
+        Comment comment;
+        comment = Comment.builder()
+                .comment(commentForm.getComment())
+                .nickName(account.getNickName())
+                .groupOrder(0L)
+                .intent(0L)
+                .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm")))
+                .build();
+        return comment;
     }
 
     private Comment newReplyComment(Account account, CommentForm commentForm) {
@@ -61,7 +69,7 @@ public class CommentService {
                     .groupId(commentForm.getGroupId())
                     .groupOrder(commentRepository.maxGroupOrder(commentForm.getGroupId()) + 1)
                     .intent(commentForm.getIntent() + 1)
-                    .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
+                    .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .build();
         }   else {
 
@@ -81,24 +89,11 @@ public class CommentService {
                     .groupId(commentForm.getGroupId())
                     .groupOrder(interruptPosition)
                     .intent(commentForm.getIntent() + 1)
-                    .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd HH:mm")))
+                    .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")))
                     .build();
         }
         return comment;
     }
-
-    private Comment newFirstComment(Account account, CommentForm commentForm) {
-        Comment comment;
-        comment = Comment.builder()
-                .comment(commentForm.getComment())
-                .nickName(account.getNickName())
-                .groupOrder(0L)
-                .intent(0L)
-                .commentTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY.MM.dd. HH:mm")))
-                .build();
-        return comment;
-    }
-
 
     private void setCommentGroupId(Comment comment) {
         comment.setGroupId(comment.getId());
@@ -106,18 +101,17 @@ public class CommentService {
 
     public Map<String,Object> getAllCommentList(CommentForm commentForm, Pageable pageable) {
         Page<Comment> allByBoardOwnerId = commentRepository.findAllByBoardOwnerId(commentForm.getBoardId(), pageable);
-        List<CommentForm> commentFormList = mappingEntityToDto(allByBoardOwnerId);
+        List<CommentForm> commentFormList = mappingEntityToForm(allByBoardOwnerId);
 
         Map<String,Object> result = new HashMap<>();
         result.put("commentFormList", commentFormList);
-        result.put("pageNumber", allByBoardOwnerId.getNumber());
-        result.put("pageTotalPages", allByBoardOwnerId.getTotalPages());
 
         return result;
     }
 
-    private List<CommentForm> mappingEntityToDto(Page<Comment> commentList) {
+    private List<CommentForm> mappingEntityToForm(Page<Comment> commentList) {
         List<CommentForm> commentFormList = new ArrayList<>();
+
         for (Comment comment : commentList) {
             CommentForm commentForm = mapper.map(comment, CommentForm.class);
             commentForm.setAccountId(comment.getAccountOwner().getId());
@@ -141,9 +135,7 @@ public class CommentService {
                 commentForm.getCommentId()).get().setComment(commentForm.getComment());
     }
 
-    @Transactional(readOnly = true)
     public Page<Comment> findCommentByAccount(Account account, Pageable pageable) {
-        Page<Comment> page = commentRepository.findAllByAccountOwnerId(account.getId(), pageable);
-        return page;
+        return commentRepository.findAllByAccountOwnerId(account.getId(), pageable);
     }
 }

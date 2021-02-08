@@ -1,7 +1,6 @@
 package com.kfashion.kfashion.account;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -51,24 +50,6 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @GetMapping("/check-email-token")
-    public String checkEmailToken(String email, String token, Model model) {
-        Account account = accountRepository.findByEmail(email);
-        String view = "account/checked-email";
-        if (account == null) {
-            model.addAttribute("error", "wrong.email");
-            return view;
-        }
-        if (!account.getEmailCheckToken().equals(token)) {
-            model.addAttribute("error", "wrong.token");
-            return view;
-        }
-        model.addAttribute("email", account.getEmail());
-        accountService.completeLogin(account);
-
-        return view;
-    }
-
     @GetMapping("/check-email")
     public String checkEmail(@CurrentUser Account account, Model model) {
         if (account != null) {
@@ -85,6 +66,25 @@ public class AccountController {
             model.addAttribute("email", account.getEmail());
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/check-email-token")
+    public String checkEmailToken(String email, String token, Model model) {
+        Account account = accountRepository.findByEmail(email);
+        String view = "account/checked-email";
+
+        if (account == null) {
+            model.addAttribute("error", "wrong.email");
+            return view;
+        }
+        if (!account.getEmailCheckToken().equals(token)) {
+            model.addAttribute("error", "wrong.token");
+            return view;
+        }
+        model.addAttribute("email", account.getEmail());
+        accountService.completeLogin(account);
+
+        return view;
     }
 
     @GetMapping("/find-password")

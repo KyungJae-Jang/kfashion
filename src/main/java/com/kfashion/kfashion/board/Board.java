@@ -44,11 +44,11 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     private Account owner;
 
-    @OneToMany(mappedBy = "boardOwner", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "boardOwner", orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     public String getStringFullTimeFormat(){
-        return postingTime.format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm"));
+        return postingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public String getStringHalfTimeFormat(){

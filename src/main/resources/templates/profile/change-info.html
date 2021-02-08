@@ -72,25 +72,6 @@
                                    th:errors="*{newNickName}">NickName Error</small>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col mt-4 mb-2"><h4>알림설정</h4></div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" th:field="*{commentPostedByEmail}"
-                                       id="commentPostedByEmail">
-                                <label class="custom-control-label" for="commentPostedByEmail">이메일로 받기</label>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="custom-control custom-switch custom-control-inline">
-                                <input type="checkbox" class="custom-control-input" th:field="*{commentPostedByWeb}"
-                                       id="commentPostedByWeb">
-                                <label class="custom-control-label" for="commentPostedByWeb">웹으로 받기</label>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row mt-4">
                         <div class="col ">
                             <button type="submit" class="btn btn-primary btn-block">수정하기</button>

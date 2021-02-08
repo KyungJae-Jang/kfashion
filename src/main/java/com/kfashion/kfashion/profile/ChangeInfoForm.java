@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -28,7 +27,5 @@ public class ChangeInfoForm {
 
     public ChangeInfoForm(Account account){
         this.newNickName = this.oldNickName = account.getNickName();
-        this.commentPostedByEmail = account.isCommentPostedByEmail();
-        this.commentPostedByWeb = account.isCommentPostedByWeb();
     }
 }

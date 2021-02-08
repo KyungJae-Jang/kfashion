@@ -30,18 +30,14 @@ public class Account {
 
     private LocalDateTime confirmDeadLine;
 
-    private boolean emailVerified;  // TODO 미인증시 자동 탈퇴
+    private boolean emailVerified;
 
     private String emailCheckToken;
 
-    private boolean commentPostedByEmail;
-
-    private boolean commentPostedByWeb;
-
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
     private List<Board> boardList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "accountOwner", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "accountOwner", orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     public void generateCheckToken() {
@@ -56,10 +52,8 @@ public class Account {
         this.password = password;
     }
 
-    public void updateInfo(String nickName, boolean commentPostedByEmail, boolean commentPostedByWeb){
+    public void updateInfo(String nickName){
         this.nickName = nickName;
-        this.commentPostedByEmail = commentPostedByEmail;
-        this.commentPostedByWeb = commentPostedByWeb;
     }
 
     public void addBoard(Board board){

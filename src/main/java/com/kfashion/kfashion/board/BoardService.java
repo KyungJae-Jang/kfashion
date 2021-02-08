@@ -3,7 +3,6 @@ package com.kfashion.kfashion.board;
 import com.kfashion.kfashion.account.Account;
 import com.kfashion.kfashion.account.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,6 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class BoardService {
-
-    private final ApplicationEventPublisher eventPublisher;
     private final BoardRepository boardRepository;
     private final AccountRepository accountRepository;
 
@@ -38,6 +35,22 @@ public class BoardService {
         if(board.getGroupId() == null){
             setBoardGroupId(savedBoard);
         }
+    }
+
+    private Board newFirstBoard(Account account, BoardForm boardForm) {
+        Board board;
+        board = Board.builder()
+                .groupOrder(0L)
+                .intent(0L)
+                .boardName(boardForm.getBoardName())
+                .nickname(account.getNickName())
+                .subject(boardForm.getSubject())
+                .contents(boardForm.getContents())
+                .image(boardForm.getImage())
+                .postingTime(LocalDateTime.now())
+                .view(0L)
+                .build();
+        return board;
     }
 
     private Board newReplyBoard(Account account, BoardForm boardForm) {
@@ -85,30 +98,8 @@ public class BoardService {
         return board;
     }
 
-    private Board newFirstBoard(Account account, BoardForm boardForm) {
-        Board board;
-        board = Board.builder()
-                .groupOrder(0L)
-                .intent(0L)
-                .boardName(boardForm.getBoardName())
-                .nickname(account.getNickName())
-                .subject(boardForm.getSubject())
-                .contents(boardForm.getContents())
-                .image(boardForm.getImage())
-                .postingTime(LocalDateTime.now())
-                .view(0L)
-                .build();
-        return board;
-    }
-
     private void setBoardGroupId(Board board) {
         board.setGroupId(board.getId());
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Board> findAllByBoardName(String boardName, Pageable pageable) {
-        Page<Board> page = boardRepository.findBoardByBoardName(boardName, pageable);
-        return page;
     }
 
     public Board getBoardById(Long id) {
@@ -120,12 +111,6 @@ public class BoardService {
     public void updateBoard(BoardForm boardForm) {
         Board board = getBoardById(boardForm.getBoardId());
 
-        if(board.getImage().equals(boardForm.getImage())){
-            System.out.println("True");
-        } else {
-            System.out.println("False");
-        }
-
         board.updateBoard(boardForm.getBoardName(), boardForm.getSubject(),
                 boardForm.getContents(), boardForm.getImage());
         boardRepository.save(board);
@@ -136,9 +121,7 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
     public Page<Board> findBoardByAccount(Account account, Pageable pageable) {
-        Page<Board> page = boardRepository.findBoardByOwnerId(account.getId(), pageable);
-        return page;
+        return boardRepository.findBoardByOwnerId(account.getId(), pageable);
     }
 }

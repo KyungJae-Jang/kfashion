@@ -82,18 +82,13 @@
             <div class="col-auto px-0">
                 <a class="btn btn-primary active"
                    role="button" aria-pressed="true"
-                   href="#" th:href="@{/board-update(boardId=${board.getId()})}" th:if="${board.getOwner().getId().equals(account.getId())}? hidden">수정</a>
+                   href="#" th:href="@{/board-update(boardId=${board.getId()})}"
+                   th:if="${board.getOwner().getId().equals(account.getId())}? hidden">수정</a>
                 <a class="btn btn-danger active"
                    role="button" aria-pressed="true" th:if="${board.getOwner().getId().equals(account.getId())}? hidden"
                    data-toggle="modal" data-target="#myModal">삭제</a>
             </div>
             <div class="col-lg-2"></div>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination pagination-sm" id="pagination">
-                </ul>
-            </nav>
         </div>
     </div>
     <!-- Modal -->
@@ -133,9 +128,79 @@
             showList();
         })
 
+        function showList() {
+
+            var boardId = /*[[${board.getId()}]]*/ null;
+
+            $.ajax({
+                type: 'GET',
+                url: '/comment-list',
+                data: {boardId : boardId},
+                success: function(result) {
+
+                    var list = '';
+                    var data = result.commentFormList;
+
+                    $.each(data, function (index){
+                        list    += "<li class='list-group-item border-white' id='commentCard"+ index + "'>"
+                            + "<div ";
+                        if(data[index].intent > 0){
+                            list += "style='padding-left:"+ data[index].intent * 25 +"px'";
+                        }
+
+                        list    += ">";
+
+                        if(data[index].intent > 0){
+                            list += "<svg width='1em' height='1em' viewBox=\"0 0 16 16\" class=\"bi bi-arrow-return-right\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\">\n"
+                                + "<path fill-rule=\"evenodd\" d=\"M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z\"/>"
+                                + "</svg>";
+                        }
+
+                        list    += "<b>"+ data[index].nickName + "</b>";
+
+                        if(data[index].parentNickName != null){
+                            list += "</br>" + "<b class='text-muted'>"+ "@"+ data[index].parentNickName +"</b>";
+                        }
+                        list    += "<p>" + data[index].comment + "</p>"
+                            + "<small>" +  data[index].commentTime + "</small>"
+                            + "<a role='button' class='btn active px-0 ml-4' onclick='updateButton("+ index +")'";
+
+                        if([[${account.getId()}]] !== data[index].accountId){
+                            list += "hidden";
+                        }
+
+                        list    += ">수정</a>"
+                            + "<a role='button' class='btn active px-0 ml-2' onclick='deleteButton("+ data[index].commentId +")'";
+
+                        if([[${account.getId()}]] !== data[index].accountId){
+                            list += "hidden";
+                        }
+
+                        list    += ">삭제</a>"
+                            + "<a role='button' class='btn active px-0 ml-2' onclick='replyButton("+ index +")'>답글쓰기</a>"
+                            + "<input type='hidden' className='form-control' name='commentId' id='commentId' value='" + data[index].commentId + "'>"
+                            + "<input type='hidden' className='form-control' name='groupId' id='groupId' value='" + data[index].groupId + "'>"
+                            + "<input type='hidden' className='form-control' name='groupOrder' id='groupOrder' value='" + data[index].groupOrder + "'>"
+                            + "<input type='hidden' className='form-control' name='intent' id='intent' value='" + data[index].intent + "'>"
+                            + "</div>"
+
+                            + "</li>";
+
+                    });
+
+                    $('#commentList').html(list);
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.log('error:' + error);
+                }
+            });
+        }
+
         $('#commentButton').click(function(){
 
-            if($('#comment').val() == ''){
+            if($('#comment').val() === ''){
                 alert("내용을 입력하세요");
                 return;
             }
@@ -163,95 +228,6 @@
             });
         });
 
-        function showList(i) {
-
-            var movePageNumber = i;
-            var boardId = /*[[${board.getId()}]]*/ null;
-
-            $.ajax({
-                type: 'GET',
-                url: '/comment-list?page=' + movePageNumber,
-                data: {boardId : boardId},
-                success: function(result) {
-
-                    var list = '';
-                    var page = '';
-                    var data = result.commentFormList;
-                    var pageNumber = result.pageNumber;
-                    var pageTotalPages = result.pageTotalPages;
-
-                    $.each(data, function (index){
-                        list    += "<li class='list-group-item border-white' id='commentCard"+ index + "'>"
-                                + "<div ";
-                                if(data[index].intent > 0){
-                                    list += "style='padding-left:"+ data[index].intent * 25 +"px'";
-                                }
-
-                        list    += ">";
-
-                                if(data[index].intent > 0){
-                                    list += "<svg width='1em' height='1em' viewBox=\"0 0 16 16\" class=\"bi bi-arrow-return-right\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\">\n"
-                                    + "<path fill-rule=\"evenodd\" d=\"M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z\"/>"
-                                    + "</svg>";
-                                 }
-
-                        list    += "<b>"+ data[index].nickName + "</b>";
-
-                                if(data[index].parentNickName != null){
-                                    list += "</br>" + "<b class='text-muted'>"+ "@"+ data[index].parentNickName +"</b>";
-                                }
-                        list    += "<p>" + data[index].comment + "</p>"
-                                + "<small>" +  data[index].commentTime + "</small>"
-                                + "<a role='button' class='btn active px-0 ml-4' onclick='updateButton("+ index +")'";
-
-                                if([[${account.getId()}]] != data[index].accountId){
-                                    list += "hidden";
-                                }
-
-                        list    += ">수정</a>"
-                                + "<a role='button' class='btn active px-0 ml-2' onclick='deleteButton("+ data[index].commentId +")'";
-
-                                if([[${account.getId()}]] != data[index].accountId){
-                                    list += "hidden";
-                                }
-
-                        list    += ">삭제</a>"
-                                + "<a role='button' class='btn active px-0 ml-2' onclick='replyButton("+ index +")'>답글쓰기</a>"
-                                + "<input type='hidden' className='form-control' name='commentId' id='commentId' value='" + data[index].commentId + "'>"
-                                + "<input type='hidden' className='form-control' name='groupId' id='groupId' value='" + data[index].groupId + "'>"
-                                + "<input type='hidden' className='form-control' name='groupOrder' id='groupOrder' value='" + data[index].groupOrder + "'>"
-                                + "<input type='hidden' className='form-control' name='intent' id='intent' value='" + data[index].intent + "'>"
-                                + "</div>"
-                                + "</li>";
-
-                    });
-
-                    $('#commentList').html(list);
-
-                    var step;
-                    for(step = 0; step < pageTotalPages; step++){
-                        page += "<li class='page-item ";
-
-                        if(step === pageNumber){
-                            page += "active";
-                        }
-                        page += "'>";
-                        page += "<a class=\"page-link\" href='#' onclick='showList("+ step +")'>"+ (step + 1)+ "</a>"
-                            + "</li>";
-                    }
-
-                    console.log(pageNumber);
-                    console.log(pageTotalPages)
-
-                    $('#pagination').html(page);
-
-                },
-                error: function (xhr, status, error) {
-                    console.log('error:' + error);
-                }
-            });
-        }
-
         function updateButton(index){
 
             var id = "commentCard" + index;
@@ -270,6 +246,7 @@
                     + "</div>";
 
             $('#'+ id).replaceWith(input);
+
             $('#commentUpdate').val(commentOld);
 
             $('#commentUpdateButton').click(function(){
@@ -372,6 +349,7 @@
 
 
             $('#commentReplyButton').click(function () {
+
                 if( $('#commentReply').val() == ''){
                     alert("내용을 입력하세요");
                     return;
@@ -398,6 +376,7 @@
                     success: function() {
                         console.log('replyButton success');
                         showList();
+                        click = true;
                     },
                     error: function (xhr, status, error) {
                         console.log('error:' + error);
