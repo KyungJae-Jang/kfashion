@@ -4,6 +4,7 @@ import com.kfashion.kfashion.mail.EmailMessage;
 import com.kfashion.kfashion.mail.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +28,9 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final EmailService emailService;
     private final TemplateEngine templateEngine;
+
+    @Value("${host.name}")
+    private String hostName;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account account = createNewAccount(signUpForm);
@@ -64,13 +68,14 @@ public class AccountService {
     }
 
     public void sendCheckEmailToken(Account newAccount) {
+
         Context context = new Context();
         context.setVariable("nickname", newAccount.getNickName());
         context.setVariable("link", "/check-email-token?email=" + newAccount.getEmail()
                 + "&token=" + newAccount.getEmailCheckToken());
         context.setVariable("linkName", "이메일 인증하기");
         context.setVariable("message", "K-Fashion 서비스를 이용하려면 링크를 클릭하세요.");
-        context.setVariable("host", "http://localhost:8080");
+        context.setVariable("host", this.hostName);
 
         String message = templateEngine.process("mail/simple-link", context);
 
@@ -91,7 +96,7 @@ public class AccountService {
                 + "&token=" + account.getEmailCheckToken());
         context.setVariable("linkName", "이메일 인증하기");
         context.setVariable("message", "K-Fashion에 로그인하려면 링크를 클릭하세요.");
-        context.setVariable("host", "http://localhost:8080");
+        context.setVariable("host", this.hostName);
 
         String message = templateEngine.process("mail/simple-link", context);
 
