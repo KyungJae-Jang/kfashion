@@ -30,6 +30,19 @@ public class BoardController {
         return "board/board-write";
     }
 
+    @PostMapping("/board-write")
+    public String boardWriteForm(@CurrentUser Account account,
+                                 @Valid BoardForm boardForm, Errors errors,
+                                 Model model){
+        if(errors.hasErrors()){
+            model.addAttribute("boardForm", boardForm);
+            return "board/board-write";
+        }
+        boardService.processNewBoard(account, boardForm);
+
+        return "redirect:/board-" + boardForm.getBoardName();
+    }
+
     @GetMapping("/board-rewrite")
     public String boardReWrite(String boardName, Long boardGroupId,
                                Long boardGroupOrder, Long boardIntent, Model model){
@@ -38,19 +51,6 @@ public class BoardController {
         model.addAttribute("rewrite", true);
 
         return "board/board-write";
-    }
-
-    @PostMapping("/board-write")
-    public String boardWriteForm(@CurrentUser Account account,
-                                 @Valid BoardForm boardForm, Errors errors,
-                                  Model model){
-        if(errors.hasErrors()){
-            model.addAttribute("boardForm", boardForm);
-            return "board/board-write";
-        }
-        boardService.processNewBoard(account, boardForm);
-
-        return "redirect:/board-" + boardForm.getBoardName();
     }
 
     @GetMapping("/board-daily")
