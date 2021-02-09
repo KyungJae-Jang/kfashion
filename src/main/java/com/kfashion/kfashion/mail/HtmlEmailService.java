@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
 
 @Component
 @Slf4j
-@Profile("dev")
+@Profile({"dev", "prod"})
 @RequiredArgsConstructor
 public class HtmlEmailService implements EmailService{
 
