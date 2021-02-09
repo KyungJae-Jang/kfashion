@@ -33,12 +33,12 @@ public class MainController {
         model.addAttribute("dailyBoardList", boardRepository.findTop4ByBoardNameOrderByIdDesc("daily"));
         model.addAttribute("fashionBoardList", boardRepository.findTop4ByBoardNameOrderByIdDesc("fashion"));
 
-        return "/index";
+        return "index";
     }
 
     @GetMapping("/login")
     public String login(){
-        return "/login";
+        return "login";
     }
 
     @GetMapping("/search/board")
@@ -50,6 +50,6 @@ public class MainController {
         model.addAttribute("pageList", pageList);
         model.addAttribute("keyword", keyword);
 
-        return "/search/search-result";
+        return "search/search-result";
     }
 }
