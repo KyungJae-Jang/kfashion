@@ -21,6 +21,7 @@
  - IDE : IntelliJ
  - FontEnd : HTML, CSS, Javascript, Jquery, Bootstrap, Font-Awesome
  - BackEnd : Tomcat, AWS EC2, RDS
+ - Build Tools : Maven
  - Template Engine : Thymeleaf
  - Framework : Spring Framework
      - Spring Security
