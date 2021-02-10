@@ -6,6 +6,7 @@
 ## 1. 프로젝트 요약
 
 ## 2. 개발 환경
+'''
   - Language : Java 11
   - O/S : Mac OS 11
   - DB : PostgreSQL, H2 Database
@@ -20,6 +21,7 @@
       - Spring Data JPA
       - Mail
   - 기타 툴 : Spring Boot devtools, Lombok, Modelmapper
+'''
 
 ## 3. 주요 기능
 ## 4. 프로젝트 중 발생한 문제점
