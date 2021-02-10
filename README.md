@@ -10,7 +10,7 @@
  - 프로젝트 인원 : 1명
  - 프로젝트 소개 : Spring Framework를 이용한 패션 정보 공유 사이트를 구축했습니다.
  - 개발 목표 : Spring Framework를 중심으로 가능한 많은 기술을 활용한 개발을 경험해보고???
- - 참고 사이트 : 어미새 - https://eomisae.co.kr/
+ - 참고 사이트 : https://eomisae.co.kr/
 ```
 
 ## 2. 개발 환경
