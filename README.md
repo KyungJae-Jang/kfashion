@@ -2,7 +2,7 @@
 ### 패션 정보 공유 사이트
 
 **데모사이트** : http://3.36.139.227:8080/
-**계정** : ID admin@admin.com PW adminadmin
+*계정* : ID admin@admin.com PW adminadmin
 
 ## 1. 프로젝트 요약
 ```
